@@ -9,6 +9,6 @@ struct WatchRootView: View {
             WatchWeightView()
             WatchWaistView()
         }
-        .tabViewStyle(.page)
+        .tabViewStyle(.verticalPage)
     }
 }

@@ -3,15 +3,23 @@ import WatchKit
 
 struct WatchWaterView: View {
     @EnvironmentObject private var store: IntakeStore
+    @AppStorage("target.waterGlasses") private var target: Double = 8
+
+    private var total: Double { store.total(of: .water) }
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 10) {
+            VStack(spacing: 8) {
                 Text("Water")
                     .font(.headline)
-                Text(Formatting.glasses(store.total(of: .water)))
+                Text(Formatting.glasses(total))
                     .font(.title3.bold())
                     .foregroundStyle(.blue)
+                ProgressView(value: min(total, target), total: target)
+                    .tint(.blue)
+                Text("of \(Formatting.glasses(target))")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
 
                 HStack(spacing: 8) {
                     quickButton(glasses: 0.5, label: "½")

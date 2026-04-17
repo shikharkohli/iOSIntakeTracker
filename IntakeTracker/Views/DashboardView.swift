@@ -2,6 +2,7 @@ import SwiftUI
 
 struct DashboardView: View {
     @EnvironmentObject private var store: IntakeStore
+    @State private var showSettings = false
 
     var body: some View {
         NavigationStack {
@@ -17,6 +18,18 @@ struct DashboardView: View {
             }
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Today")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showSettings = true
+                    } label: {
+                        Image(systemName: "gearshape")
+                    }
+                }
+            }
+            .sheet(isPresented: $showSettings) {
+                SettingsView()
+            }
         }
     }
 }
@@ -25,13 +38,30 @@ struct DashboardView: View {
 
 private struct WaterCard: View {
     @EnvironmentObject private var store: IntakeStore
+    @AppStorage("target.waterGlasses") private var target: Double = 8
+
+    private var total: Double { store.total(of: .water) }
 
     var body: some View {
         Card(title: "Water", systemImage: "drop.fill", tint: .blue) {
             VStack(alignment: .leading, spacing: 12) {
-                Text(Formatting.glasses(store.total(of: .water)))
-                    .font(.largeTitle.bold())
-                    .monospacedDigit()
+                HStack(alignment: .firstTextBaseline) {
+                    Text(Formatting.glasses(total))
+                        .font(.largeTitle.bold())
+                        .monospacedDigit()
+                    Spacer()
+                    Text("\(Int(min(total / max(target, 0.01), 1) * 100))%")
+                        .font(.subheadline.bold())
+                        .monospacedDigit()
+                        .foregroundStyle(.blue)
+                }
+
+                ProgressView(value: min(total, target), total: target)
+                    .tint(.blue)
+
+                Text("Goal: \(Formatting.glasses(target))")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
 
                 HStack {
                     ForEach(WaterPreset.presets) { preset in
@@ -61,14 +91,31 @@ private struct WaterCard: View {
 
 private struct CaffeineCard: View {
     @EnvironmentObject private var store: IntakeStore
+    @AppStorage("target.caffeineMg") private var target: Double = 400
     @State private var showCustom = false
+
+    private var total: Double { store.total(of: .caffeine) }
 
     var body: some View {
         Card(title: "Caffeine", systemImage: "cup.and.saucer.fill", tint: .brown) {
             VStack(alignment: .leading, spacing: 12) {
-                Text(Formatting.mg(store.total(of: .caffeine)))
-                    .font(.largeTitle.bold())
-                    .monospacedDigit()
+                HStack(alignment: .firstTextBaseline) {
+                    Text(Formatting.mg(total))
+                        .font(.largeTitle.bold())
+                        .monospacedDigit()
+                    Spacer()
+                    Text("\(Int(min(total / max(target, 0.01), 1) * 100))%")
+                        .font(.subheadline.bold())
+                        .monospacedDigit()
+                        .foregroundStyle(.brown)
+                }
+
+                ProgressView(value: min(total, target), total: target)
+                    .tint(.brown)
+
+                Text("Limit: \(Formatting.mg(target))")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
 
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
                     ForEach(CaffeinePreset.presets) { preset in

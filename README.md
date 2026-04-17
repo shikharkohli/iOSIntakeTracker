@@ -12,7 +12,13 @@ A simple iOS + Apple Watch app for tracking water, caffeine, and post-meal fulln
 
 **Weight & Waist** — Quick log with +/- buttons pre-filled from your last reading. Units follow your locale (kg/cm on metric, lb/in on imperial).
 
+**Daily targets** — Configure goals for water and caffeine in Settings; dashboard cards show a progress bar + percentage, and the watch shows progress below the daily total.
+
+**Trends** — Chart view with Day / Week / Month / Year selectors. Bar charts for water & caffeine (with goal/limit reference lines), line charts for weight & waist, scatter for fullness.
+
 **History** — Day-grouped list on iOS, filter by type, swipe to delete.
+
+**Watch navigation** — Pages swipe vertically and are navigable with the Digital Crown.
 
 **Watch ↔ Phone sync** — Entries logged on either device sync via WatchConnectivity.
 
