@@ -45,7 +45,7 @@ private struct WaterCard: View {
                                     .font(.caption)
                             }
                             .frame(maxWidth: .infinity, minHeight: 56)
-                            .background(Color.blue.opacity(0.12))
+                            .tintedFill(.blue)
                             .foregroundStyle(.blue)
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                         }
@@ -87,7 +87,7 @@ private struct CaffeineCard: View {
                                     .foregroundStyle(.secondary)
                             }
                             .frame(maxWidth: .infinity, minHeight: 70)
-                            .background(Color.brown.opacity(0.12))
+                            .tintedFill(.brown)
                             .foregroundStyle(.brown)
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                         }
@@ -183,7 +183,7 @@ private struct FullnessCard: View {
                                 Text("\(level.rawValue)").font(.caption2.bold())
                             }
                             .frame(maxWidth: .infinity, minHeight: 58)
-                            .background(Color.orange.opacity(0.12))
+                            .tintedFill(.orange)
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                         }
                         .buttonStyle(.plain)
@@ -410,5 +410,22 @@ private struct Card<Content: View>: View {
         .padding()
         .background(Color(.secondarySystemGroupedBackground))
         .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+}
+
+// MARK: - Dark-mode-aware tint fill
+
+private struct TintedFill: ViewModifier {
+    let color: Color
+    @Environment(\.colorScheme) private var scheme
+
+    func body(content: Content) -> some View {
+        content.background(color.opacity(scheme == .dark ? 0.24 : 0.12))
+    }
+}
+
+private extension View {
+    func tintedFill(_ color: Color) -> some View {
+        modifier(TintedFill(color: color))
     }
 }
