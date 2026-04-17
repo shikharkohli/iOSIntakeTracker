@@ -102,7 +102,7 @@ private func bucketedTotals(entries: [IntakeEntry], type: IntakeType, range: Tre
     }
     return buckets
         .sorted { $0.key < $1.key }
-        .map { Bucket(date: $0.key, value: $1.value) }
+        .map { Bucket(date: $0, value: $1) }
 }
 
 private func rawPoints(entries: [IntakeEntry], type: IntakeType, range: TrendRange) -> [Bucket] {
