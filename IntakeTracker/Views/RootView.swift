@@ -6,6 +6,9 @@ struct RootView: View {
             DashboardView()
                 .tabItem { Label("Today", systemImage: "sun.max.fill") }
 
+            TrendsView()
+                .tabItem { Label("Trends", systemImage: "chart.xyaxis.line") }
+
             HistoryView()
                 .tabItem { Label("History", systemImage: "clock.arrow.circlepath") }
         }
