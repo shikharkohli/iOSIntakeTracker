@@ -4,6 +4,8 @@ enum IntakeType: String, Codable, CaseIterable, Identifiable {
     case water
     case caffeine
     case fullness
+    case weight
+    case waist
 
     var id: String { rawValue }
 
@@ -12,6 +14,8 @@ enum IntakeType: String, Codable, CaseIterable, Identifiable {
         case .water: return "Water"
         case .caffeine: return "Caffeine"
         case .fullness: return "Fullness"
+        case .weight: return "Weight"
+        case .waist: return "Waist"
         }
     }
 
@@ -20,6 +24,8 @@ enum IntakeType: String, Codable, CaseIterable, Identifiable {
         case .water: return "drop.fill"
         case .caffeine: return "cup.and.saucer.fill"
         case .fullness: return "fork.knife"
+        case .weight: return "scalemass.fill"
+        case .waist: return "ruler.fill"
         }
     }
 }

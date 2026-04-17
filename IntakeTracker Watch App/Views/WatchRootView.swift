@@ -6,6 +6,8 @@ struct WatchRootView: View {
             WatchWaterView()
             WatchCaffeineView()
             WatchFullnessView()
+            WatchWeightView()
+            WatchWaistView()
         }
         .tabViewStyle(.page)
     }

@@ -10,6 +10,8 @@ A simple iOS + Apple Watch app for tracking water, caffeine, and post-meal fulln
 
 **Fullness** — After a meal, log how full you feel on a 1–5 emoji scale (😋 → 🥴).
 
+**Weight & Waist** — Quick log with +/- buttons pre-filled from your last reading. Units follow your locale (kg/cm on metric, lb/in on imperial).
+
 **History** — Day-grouped list on iOS, filter by type, swipe to delete.
 
 **Watch ↔ Phone sync** — Entries logged on either device sync via WatchConnectivity.

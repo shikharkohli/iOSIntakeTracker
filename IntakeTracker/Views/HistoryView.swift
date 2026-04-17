@@ -80,6 +80,8 @@ private struct EntryRow: View {
         case .water: return .blue
         case .caffeine: return .brown
         case .fullness: return .orange
+        case .weight: return .green
+        case .waist: return .purple
         }
     }
 
@@ -90,6 +92,8 @@ private struct EntryRow: View {
         case .fullness:
             let level = FullnessLevel(rawValue: Int(entry.amount))
             return "\(level?.emoji ?? "") \(level?.label ?? "Fullness")"
+        case .weight: return Formatting.weight(kg: entry.amount)
+        case .waist: return Formatting.waist(cm: entry.amount)
         }
     }
 }

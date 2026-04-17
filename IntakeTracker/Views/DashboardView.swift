@@ -10,6 +10,8 @@ struct DashboardView: View {
                     WaterCard()
                     CaffeineCard()
                     FullnessCard()
+                    WeightCard()
+                    WaistCard()
                 }
                 .padding()
             }
@@ -193,6 +195,196 @@ private struct FullnessCard: View {
                     .foregroundStyle(.secondary)
             }
         }
+    }
+}
+
+// MARK: - Weight
+
+private struct WeightCard: View {
+    @EnvironmentObject private var store: IntakeStore
+    @State private var showSheet = false
+
+    private var latest: IntakeEntry? { store.latestEntry(type: .weight) }
+
+    var body: some View {
+        Card(title: "Weight", systemImage: "scalemass.fill", tint: .green) {
+            VStack(alignment: .leading, spacing: 12) {
+                if let latest {
+                    Text(Formatting.weight(kg: latest.amount))
+                        .font(.largeTitle.bold())
+                        .monospacedDigit()
+                    Text("Last logged \(Formatting.time.string(from: latest.timestamp))")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } else {
+                    Text("Not logged yet")
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
+                }
+
+                Button {
+                    showSheet = true
+                } label: {
+                    Label("Log weight", systemImage: "plus.circle.fill")
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.green)
+            }
+        }
+        .sheet(isPresented: $showSheet) {
+            WeightSheet(initialKg: latest?.amount ?? 70)
+        }
+    }
+}
+
+private struct WeightSheet: View {
+    @EnvironmentObject private var store: IntakeStore
+    @Environment(\.dismiss) private var dismiss
+    @State private var value: Double
+    private let unit: UnitMass
+    private let step: Double
+    private let range: ClosedRange<Double>
+
+    init(initialKg: Double) {
+        let metric = Formatting.usesMetric
+        self.unit = metric ? .kilograms : .pounds
+        self.step = metric ? 0.1 : 0.2
+        self.range = metric ? 20...300 : 44...660
+        self._value = State(initialValue: Formatting.display(fromKg: initialKg))
+    }
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("Weight") {
+                    Stepper(value: $value, in: range, step: step) {
+                        Text(formatted)
+                            .font(.title2.bold())
+                            .monospacedDigit()
+                    }
+                    Slider(value: $value, in: range, step: step)
+                }
+            }
+            .navigationTitle("Log Weight")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Log") {
+                        store.add(IntakeEntry(type: .weight, amount: Formatting.kg(fromDisplay: value)))
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+
+    private var formatted: String {
+        let m = Measurement(value: value, unit: unit)
+        let f = MeasurementFormatter()
+        f.unitOptions = [.providedUnit]
+        f.unitStyle = .medium
+        f.numberFormatter.maximumFractionDigits = 1
+        f.numberFormatter.minimumFractionDigits = 1
+        return f.string(from: m)
+    }
+}
+
+// MARK: - Waist
+
+private struct WaistCard: View {
+    @EnvironmentObject private var store: IntakeStore
+    @State private var showSheet = false
+
+    private var latest: IntakeEntry? { store.latestEntry(type: .waist) }
+
+    var body: some View {
+        Card(title: "Waist", systemImage: "ruler.fill", tint: .purple) {
+            VStack(alignment: .leading, spacing: 12) {
+                if let latest {
+                    Text(Formatting.waist(cm: latest.amount))
+                        .font(.largeTitle.bold())
+                        .monospacedDigit()
+                    Text("Last logged \(Formatting.time.string(from: latest.timestamp))")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } else {
+                    Text("Not logged yet")
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
+                }
+
+                Button {
+                    showSheet = true
+                } label: {
+                    Label("Log waist", systemImage: "plus.circle.fill")
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.purple)
+            }
+        }
+        .sheet(isPresented: $showSheet) {
+            WaistSheet(initialCm: latest?.amount ?? 85)
+        }
+    }
+}
+
+private struct WaistSheet: View {
+    @EnvironmentObject private var store: IntakeStore
+    @Environment(\.dismiss) private var dismiss
+    @State private var value: Double
+    private let unit: UnitLength
+    private let step: Double
+    private let range: ClosedRange<Double>
+
+    init(initialCm: Double) {
+        let metric = Formatting.usesMetric
+        self.unit = metric ? .centimeters : .inches
+        self.step = metric ? 0.5 : 0.25
+        self.range = metric ? 40...200 : 16...79
+        self._value = State(initialValue: Formatting.display(fromCm: initialCm))
+    }
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("Waist circumference") {
+                    Stepper(value: $value, in: range, step: step) {
+                        Text(formatted)
+                            .font(.title2.bold())
+                            .monospacedDigit()
+                    }
+                    Slider(value: $value, in: range, step: step)
+                }
+            }
+            .navigationTitle("Log Waist")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Log") {
+                        store.add(IntakeEntry(type: .waist, amount: Formatting.cm(fromDisplay: value)))
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+
+    private var formatted: String {
+        let m = Measurement(value: value, unit: unit)
+        let f = MeasurementFormatter()
+        f.unitOptions = [.providedUnit]
+        f.unitStyle = .medium
+        f.numberFormatter.maximumFractionDigits = 1
+        f.numberFormatter.minimumFractionDigits = 1
+        return f.string(from: m)
     }
 }
 

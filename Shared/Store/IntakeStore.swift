@@ -66,6 +66,10 @@ final class IntakeStore: ObservableObject {
         entries(on: date, type: .fullness).first
     }
 
+    func latestEntry(type: IntakeType) -> IntakeEntry? {
+        entries.first { $0.type == type }
+    }
+
     // MARK: - Persistence
 
     private func load() {
