@@ -13,7 +13,7 @@ enum IntakeType: String, Codable, CaseIterable, Identifiable {
         switch self {
         case .water: return "Water"
         case .caffeine: return "Caffeine"
-        case .fullness: return "Fullness"
+        case .fullness: return "Meals"
         case .weight: return "Weight"
         case .waist: return "Waist"
         }
@@ -30,19 +30,59 @@ enum IntakeType: String, Codable, CaseIterable, Identifiable {
     }
 }
 
+enum MealType: String, Codable, CaseIterable, Identifiable {
+    case breakfast
+    case lunch
+    case snack
+    case dinner
+
+    var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .breakfast: return "Breakfast"
+        case .lunch: return "Lunch"
+        case .snack: return "Snack"
+        case .dinner: return "Dinner"
+        }
+    }
+
+    var emoji: String {
+        switch self {
+        case .breakfast: return "🌅"
+        case .lunch: return "☀️"
+        case .snack: return "🍎"
+        case .dinner: return "🌙"
+        }
+    }
+
+    var systemImage: String {
+        switch self {
+        case .breakfast: return "sunrise.fill"
+        case .lunch: return "sun.max.fill"
+        case .snack: return "leaf.fill"
+        case .dinner: return "moon.stars.fill"
+        }
+    }
+
+    var tint: String { rawValue } // used for chart legend
+}
+
 struct IntakeEntry: Identifiable, Codable, Hashable {
     let id: UUID
     let type: IntakeType
     let amount: Double
     let timestamp: Date
     let note: String?
+    let meal: MealType?
 
-    init(id: UUID = UUID(), type: IntakeType, amount: Double, timestamp: Date = Date(), note: String? = nil) {
+    init(id: UUID = UUID(), type: IntakeType, amount: Double, timestamp: Date = Date(), note: String? = nil, meal: MealType? = nil) {
         self.id = id
         self.type = type
         self.amount = amount
         self.timestamp = timestamp
         self.note = note
+        self.meal = meal
     }
 }
 

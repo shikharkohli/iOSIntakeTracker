@@ -102,7 +102,7 @@ private func bucketedTotals(entries: [IntakeEntry], type: IntakeType, range: Tre
     }
     return buckets
         .sorted { $0.key < $1.key }
-        .map { Bucket(date: $0, value: $1) }
+        .map { Bucket(date: $0.key, value: $0.value) }
 }
 
 private func rawPoints(entries: [IntakeEntry], type: IntakeType, range: TrendRange) -> [Bucket] {
@@ -259,11 +259,13 @@ private struct CaffeineTrendCard: View {
 
 private struct WeightTrendCard: View {
     @EnvironmentObject private var store: IntakeStore
+    @AppStorage("target.weightKg") private var goalKg: Double = 70
     let range: TrendRange
 
     var body: some View {
         let data = rawPoints(entries: store.entries, type: .weight, range: range)
             .map { Bucket(date: $0.date, value: Formatting.display(fromKg: $0.value)) }
+        let goalDisplay = Formatting.display(fromKg: goalKg)
         let subtitle: String = {
             if let latestKg = latestAmount(store.entries, .weight) {
                 return "Latest \(Formatting.weight(kg: latestKg))"
@@ -289,6 +291,14 @@ private struct WeightTrendCard: View {
                         )
                         .foregroundStyle(.green)
                     }
+                    RuleMark(y: .value("Goal", goalDisplay))
+                        .foregroundStyle(.green.opacity(0.6))
+                        .lineStyle(StrokeStyle(lineWidth: 1, dash: [4]))
+                        .annotation(position: .topTrailing, alignment: .trailing) {
+                            Text("Goal")
+                                .font(.caption2)
+                                .foregroundStyle(.green)
+                        }
                 }
                 .chartYScale(domain: .automatic(includesZero: false))
                 .chartXAxis {
@@ -305,11 +315,13 @@ private struct WeightTrendCard: View {
 
 private struct WaistTrendCard: View {
     @EnvironmentObject private var store: IntakeStore
+    @AppStorage("target.waistCm") private var goalCm: Double = 85
     let range: TrendRange
 
     var body: some View {
         let data = rawPoints(entries: store.entries, type: .waist, range: range)
             .map { Bucket(date: $0.date, value: Formatting.display(fromCm: $0.value)) }
+        let goalDisplay = Formatting.display(fromCm: goalCm)
         let subtitle: String = {
             if let latestCm = latestAmount(store.entries, .waist) {
                 return "Latest \(Formatting.waist(cm: latestCm))"
@@ -335,6 +347,14 @@ private struct WaistTrendCard: View {
                         )
                         .foregroundStyle(.purple)
                     }
+                    RuleMark(y: .value("Goal", goalDisplay))
+                        .foregroundStyle(.purple.opacity(0.6))
+                        .lineStyle(StrokeStyle(lineWidth: 1, dash: [4]))
+                        .annotation(position: .topTrailing, alignment: .trailing) {
+                            Text("Goal")
+                                .font(.caption2)
+                                .foregroundStyle(.purple)
+                        }
                 }
                 .chartYScale(domain: .automatic(includesZero: false))
                 .chartXAxis {
@@ -349,26 +369,62 @@ private struct WaistTrendCard: View {
     }
 }
 
+private struct MealPoint: Identifiable {
+    let id = UUID()
+    let date: Date
+    let value: Double
+    let meal: MealType?
+}
+
 private struct FullnessTrendCard: View {
     @EnvironmentObject private var store: IntakeStore
     let range: TrendRange
 
-    var body: some View {
-        let data = rawPoints(entries: store.entries, type: .fullness, range: range)
-        let avg: Double = data.isEmpty ? 0 : data.map(\.value).reduce(0, +) / Double(data.count)
-        let subtitle: String = data.isEmpty ? "No readings" : String(format: "Avg %.1f / 5", avg)
+    private var data: [MealPoint] {
+        let cal = Calendar.current
+        let now = Date()
+        let startDay = cal.startOfDay(for: now)
+        let start: Date
+        switch range {
+        case .day: start = startDay
+        case .week: start = cal.date(byAdding: .day, value: -6, to: startDay) ?? startDay
+        case .month: start = cal.date(byAdding: .day, value: -29, to: startDay) ?? startDay
+        case .year: start = cal.date(byAdding: .day, value: -364, to: startDay) ?? startDay
+        }
+        return store.entries
+            .filter { $0.type == .fullness && $0.timestamp >= start }
+            .sorted { $0.timestamp < $1.timestamp }
+            .map { MealPoint(date: $0.timestamp, value: $0.amount, meal: $0.meal) }
+    }
 
-        TrendCard(title: "Fullness", systemImage: "fork.knife", tint: .orange, subtitle: subtitle) {
-            if data.isEmpty {
+    var body: some View {
+        let pts = data
+        let avg: Double = pts.isEmpty ? 0 : pts.map(\.value).reduce(0, +) / Double(pts.count)
+        let subtitle: String = pts.isEmpty ? "No readings" : String(format: "Avg %.1f / 5", avg)
+
+        TrendCard(title: "Meals", systemImage: "fork.knife", tint: .orange, subtitle: subtitle) {
+            if pts.isEmpty {
                 emptyState
             } else {
                 Chart {
-                    ForEach(data) { point in
+                    ForEach(MealType.allCases) { meal in
+                        ForEach(pts.filter { $0.meal == meal }) { point in
+                            PointMark(
+                                x: .value("Date", point.date),
+                                y: .value("Level", point.value)
+                            )
+                            .foregroundStyle(by: .value("Meal", meal.displayName))
+                            .symbol(by: .value("Meal", meal.displayName))
+                            .symbolSize(100)
+                        }
+                    }
+                    // Legacy entries without a meal tag
+                    ForEach(pts.filter { $0.meal == nil }) { point in
                         PointMark(
                             x: .value("Date", point.date),
                             y: .value("Level", point.value)
                         )
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(.orange.opacity(0.5))
                         .symbolSize(80)
                     }
                 }
@@ -386,6 +442,7 @@ private struct FullnessTrendCard: View {
                         AxisValueLabel(format: range.axisFormat)
                     }
                 }
+                .chartLegend(position: .bottom, alignment: .leading)
             }
         }
     }

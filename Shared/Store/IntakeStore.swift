@@ -66,6 +66,10 @@ final class IntakeStore: ObservableObject {
         entries(on: date, type: .fullness).first
     }
 
+    func mealFullness(for meal: MealType, on date: Date = Date()) -> IntakeEntry? {
+        entries(on: date, type: .fullness).first { $0.meal == meal }
+    }
+
     func latestEntry(type: IntakeType) -> IntakeEntry? {
         entries.first { $0.type == type }
     }

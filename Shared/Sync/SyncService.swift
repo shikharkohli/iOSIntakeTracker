@@ -34,6 +34,19 @@ final class SyncService: NSObject {
         guard let data = try? JSONEncoder().encode(entries) else { return }
         try? session.updateApplicationContext(["snapshot": data])
     }
+
+    /// Sends daily targets from iOS to the watch. Only called from iOS.
+    func sendTargets(water: Double, caffeine: Double, weightKg: Double, waistCm: Double) {
+        guard let session = session, session.activationState == .activated else { return }
+        let targets: [String: Double] = [
+            "waterGlasses": water,
+            "caffeineMg": caffeine,
+            "weightKg": weightKg,
+            "waistCm": waistCm
+        ]
+        guard let data = try? JSONEncoder().encode(targets) else { return }
+        session.transferUserInfo(["targets": data])
+    }
 }
 
 extension SyncService: WCSessionDelegate {
@@ -56,6 +69,15 @@ extension SyncService: WCSessionDelegate {
         if let idString = userInfo["deletedId"] as? String,
            let id = UUID(uuidString: idString) {
             Task { @MainActor in IntakeStore.shared.mergeRemoteDelete(id: id) }
+        }
+        if let data = userInfo["targets"] as? Data,
+           let targets = try? JSONDecoder().decode([String: Double].self, from: data) {
+            Task { @MainActor in
+                if let v = targets["waterGlasses"] { UserDefaults.standard.set(v, forKey: "target.waterGlasses") }
+                if let v = targets["caffeineMg"] { UserDefaults.standard.set(v, forKey: "target.caffeineMg") }
+                if let v = targets["weightKg"] { UserDefaults.standard.set(v, forKey: "target.weightKg") }
+                if let v = targets["waistCm"] { UserDefaults.standard.set(v, forKey: "target.waistCm") }
+            }
         }
     }
 

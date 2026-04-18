@@ -198,48 +198,111 @@ private struct CustomCaffeineSheet: View {
 
 private struct FullnessCard: View {
     @EnvironmentObject private var store: IntakeStore
-
-    private var latest: IntakeEntry? { store.latestFullness() }
+    @State private var loggingFor: MealType? = nil
 
     var body: some View {
-        Card(title: "Fullness", systemImage: "fork.knife", tint: .orange) {
+        Card(title: "Meals", systemImage: "fork.knife", tint: .orange) {
             VStack(alignment: .leading, spacing: 12) {
-                if let latest, let level = FullnessLevel(rawValue: Int(latest.amount)) {
-                    HStack(spacing: 8) {
-                        Text(level.emoji).font(.largeTitle)
-                        VStack(alignment: .leading) {
-                            Text(level.label).font(.headline)
-                            Text("Logged \(Formatting.time.string(from: latest.timestamp))")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
+                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+                    ForEach(MealType.allCases) { meal in
+                        MealSlot(meal: meal, entry: store.mealFullness(for: meal)) {
+                            loggingFor = meal
                         }
                     }
-                } else {
-                    Text("Not logged today")
-                        .font(.headline)
-                        .foregroundStyle(.secondary)
                 }
+                Text("Tap a meal to log your fullness  •  1 = still hungry, 5 = stuffed")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .sheet(item: $loggingFor) { meal in
+            MealFullnessSheet(meal: meal)
+        }
+    }
+}
 
-                HStack(spacing: 6) {
+private struct MealSlot: View {
+    let meal: MealType
+    let entry: IntakeEntry?
+    let onTap: () -> Void
+
+    var body: some View {
+        Button(action: onTap) {
+            VStack(spacing: 3) {
+                Text(meal.emoji).font(.title2)
+                Text(meal.displayName).font(.caption2).fontWeight(.medium)
+                if let entry, let level = FullnessLevel(rawValue: Int(entry.amount)) {
+                    Text(level.emoji).font(.footnote)
+                    Text(level.label)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                } else {
+                    Text("Log")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                }
+            }
+            .frame(maxWidth: .infinity, minHeight: 72)
+            .tintedFill(.orange)
+            .foregroundStyle(.primary)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+private struct MealFullnessSheet: View {
+    @EnvironmentObject private var store: IntakeStore
+    @Environment(\.dismiss) private var dismiss
+    let meal: MealType
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 20) {
+                VStack(spacing: 4) {
+                    Text(meal.emoji).font(.system(size: 48))
+                    Text(meal.displayName).font(.title2.bold())
+                }
+                .padding(.top, 8)
+
+                VStack(spacing: 8) {
                     ForEach(FullnessLevel.allCases) { level in
                         Button {
-                            store.add(IntakeEntry(type: .fullness, amount: Double(level.rawValue), note: level.label))
+                            store.add(IntakeEntry(type: .fullness,
+                                                  amount: Double(level.rawValue),
+                                                  note: level.label,
+                                                  meal: meal))
+                            dismiss()
                         } label: {
-                            VStack(spacing: 2) {
-                                Text(level.emoji).font(.title2)
-                                Text("\(level.rawValue)").font(.caption2.bold())
+                            HStack(spacing: 12) {
+                                Text(level.emoji).font(.title3)
+                                VStack(alignment: .leading, spacing: 1) {
+                                    Text(level.label).font(.subheadline.weight(.medium))
+                                    Text("\(level.rawValue) / 5").font(.caption).foregroundStyle(.secondary)
+                                }
+                                Spacer()
                             }
-                            .frame(maxWidth: .infinity, minHeight: 58)
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 10)
                             .tintedFill(.orange)
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                         }
                         .buttonStyle(.plain)
                     }
                 }
+                .padding(.horizontal)
 
-                Text("1 = still hungry • 5 = stuffed")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
+                Spacer()
+            }
+            .navigationTitle("How full are you?")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
+                }
             }
         }
     }

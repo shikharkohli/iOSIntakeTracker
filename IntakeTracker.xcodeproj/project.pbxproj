@@ -20,6 +20,7 @@
 		5BDDA9704A44FC01908C5AED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A49B60CEE28A7216CD91BF12 /* Assets.xcassets */; };
 		6369538F5E6130FEB64C5373 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BD96C4F807327FE6AA8DDA /* DashboardView.swift */; };
 		702509756E881679BE74D1B6 /* IntakeEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D86F6AEB050D0F31CB3BCF /* IntakeEntry.swift */; };
+		753EDB972F94139D00626B6B /* WatchSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753EDB962F94139C00626B6B /* WatchSummaryView.swift */; };
 		757408E22F92CA010022FA8F /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757408E02F92CA010022FA8F /* SettingsView.swift */; };
 		757408E32F92CA010022FA8F /* TrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757408E12F92CA010022FA8F /* TrendsView.swift */; };
 		83F54F49518B0A5B35B52DF6 /* WatchRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5A57A60F6341C83DBE21BC /* WatchRootView.swift */; };
@@ -67,6 +68,7 @@
 		647B37563C2B7499865188DC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		6A5A57A60F6341C83DBE21BC /* WatchRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchRootView.swift; sourceTree = "<group>"; };
 		6EE6FD1511030DA6948E9698 /* IntakeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntakeStore.swift; sourceTree = "<group>"; };
+		753EDB962F94139C00626B6B /* WatchSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSummaryView.swift; sourceTree = "<group>"; };
 		757408E02F92CA010022FA8F /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		757408E12F92CA010022FA8F /* TrendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendsView.swift; sourceTree = "<group>"; };
 		94FC3E420685F6E42B5473A4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 				2CD73764F03843DE98584257 /* WatchWaistView.swift */,
 				23AEE4344B69E67BD580AF22 /* WatchWaterView.swift */,
 				43B45B570E32C2DEB270697B /* WatchWeightView.swift */,
+				753EDB962F94139C00626B6B /* WatchSummaryView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -313,6 +316,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				333EF5572D3EC94750464F2D /* Formatting.swift in Sources */,
+				753EDB972F94139D00626B6B /* WatchSummaryView.swift in Sources */,
 				702509756E881679BE74D1B6 /* IntakeEntry.swift in Sources */,
 				174D7E006C16A3D5751F35CF /* IntakeStore.swift in Sources */,
 				10CD9FDF66F64350C56BF88A /* IntakeTrackerApp.swift in Sources */,

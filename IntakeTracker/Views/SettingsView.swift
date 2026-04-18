@@ -3,7 +3,29 @@ import SwiftUI
 struct SettingsView: View {
     @AppStorage("target.waterGlasses") private var waterTarget: Double = 8
     @AppStorage("target.caffeineMg") private var caffeineTarget: Double = 400
+    @AppStorage("target.weightKg") private var weightTargetKg: Double = 70
+    @AppStorage("target.waistCm") private var waistTargetCm: Double = 85
     @Environment(\.dismiss) private var dismiss
+
+    // Bindings in display units; storage is always metric
+    private var weightTargetBinding: Binding<Double> {
+        Binding(
+            get: { Formatting.display(fromKg: weightTargetKg) },
+            set: { weightTargetKg = Formatting.kg(fromDisplay: $0) }
+        )
+    }
+
+    private var waistTargetBinding: Binding<Double> {
+        Binding(
+            get: { Formatting.display(fromCm: waistTargetCm) },
+            set: { waistTargetCm = Formatting.cm(fromDisplay: $0) }
+        )
+    }
+
+    private var weightRange: ClosedRange<Double> { Formatting.usesMetric ? 20...300 : 44...660 }
+    private var weightStep: Double { Formatting.usesMetric ? 0.5 : 1.0 }
+    private var waistRange: ClosedRange<Double> { Formatting.usesMetric ? 40...200 : 16...79 }
+    private var waistStep: Double { Formatting.usesMetric ? 0.5 : 0.25 }
 
     var body: some View {
         NavigationStack {
@@ -30,7 +52,7 @@ struct SettingsView: View {
                                 .foregroundStyle(.brown)
                                 .frame(width: 24)
                             VStack(alignment: .leading) {
-                                Text("Caffeine")
+                                Text("Caffeine limit")
                                     .font(.subheadline)
                                 Text(Formatting.mg(caffeineTarget))
                                     .font(.title3.bold())
@@ -41,7 +63,43 @@ struct SettingsView: View {
                 } header: {
                     Text("Daily Targets")
                 } footer: {
-                    Text("The FDA considers up to 400 mg of caffeine per day safe for most adults. Targets can differ on iPhone and Apple Watch.")
+                    Text("The FDA considers up to 400 mg of caffeine per day safe for most adults.")
+                }
+
+                Section {
+                    Stepper(value: weightTargetBinding, in: weightRange, step: weightStep) {
+                        HStack {
+                            Image(systemName: "scalemass.fill")
+                                .foregroundStyle(.green)
+                                .frame(width: 24)
+                            VStack(alignment: .leading) {
+                                Text("Goal weight")
+                                    .font(.subheadline)
+                                Text(Formatting.weight(kg: weightTargetKg))
+                                    .font(.title3.bold())
+                                    .monospacedDigit()
+                            }
+                        }
+                    }
+
+                    Stepper(value: waistTargetBinding, in: waistRange, step: waistStep) {
+                        HStack {
+                            Image(systemName: "ruler.fill")
+                                .foregroundStyle(.purple)
+                                .frame(width: 24)
+                            VStack(alignment: .leading) {
+                                Text("Goal waist")
+                                    .font(.subheadline)
+                                Text(Formatting.waist(cm: waistTargetCm))
+                                    .font(.title3.bold())
+                                    .monospacedDigit()
+                            }
+                        }
+                    }
+                } header: {
+                    Text("Body Composition Goals")
+                } footer: {
+                    Text("Goals are used as reference lines in Trends charts. Targets sync to Apple Watch automatically.")
                 }
             }
             .navigationTitle("Settings")
@@ -51,6 +109,19 @@ struct SettingsView: View {
                     Button("Done") { dismiss() }
                 }
             }
+            .onChange(of: waterTarget) { syncTargets() }
+            .onChange(of: caffeineTarget) { syncTargets() }
+            .onChange(of: weightTargetKg) { syncTargets() }
+            .onChange(of: waistTargetCm) { syncTargets() }
         }
+    }
+
+    private func syncTargets() {
+        SyncService.shared.sendTargets(
+            water: waterTarget,
+            caffeine: caffeineTarget,
+            weightKg: weightTargetKg,
+            waistCm: waistTargetCm
+        )
     }
 }
