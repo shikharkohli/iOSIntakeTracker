@@ -3,6 +3,76 @@ import SwiftUI
 
 private let appGroupID = "group.com.intaketracker.shared"
 
+private struct ProgressRing: View {
+    let fraction: Double
+    let trackColor: Color
+    let progressColor: Color
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .stroke(trackColor.opacity(0.55), style: StrokeStyle(lineWidth: 5, lineCap: .round))
+            Circle()
+                .trim(from: 0, to: CGFloat(max(0, min(1, fraction))))
+                .stroke(progressColor, style: StrokeStyle(lineWidth: 5, lineCap: .round))
+                .rotationEffect(.degrees(-90))
+        }
+        // Avoid clipped stroke in small circular slots.
+        .padding(2)
+    }
+}
+
+private struct BatteryStyleCircularContent: View {
+    let iconSystemName: String
+    let valueText: String
+    let fraction: Double
+    let progressColor: Color
+
+    var body: some View {
+        GeometryReader { geo in
+            let s = min(geo.size.width, geo.size.height)
+            // Tuned for accessoryCircular: keep a generous inner area to avoid clipping.
+            let ringPadding = max(1, s * 0.045)
+            let ringLineWidth = max(3, s * 0.11)
+
+            // Keep the icon fully visible: its bottom edge should sit 1px above the
+            // widget's bottom clipping boundary.
+            let iconSize = max(10, s * 0.22)
+            let iconBottomInset: CGFloat = 1
+
+            ZStack {
+                ZStack {
+                    Circle()
+                        .stroke(.gray.opacity(0.55), style: StrokeStyle(lineWidth: ringLineWidth, lineCap: .round))
+                    Circle()
+                        .trim(from: 0, to: CGFloat(max(0, min(1, fraction))))
+                        .stroke(progressColor, style: StrokeStyle(lineWidth: ringLineWidth, lineCap: .round))
+                        .rotationEffect(.degrees(-90))
+                }
+                .padding(ringPadding)
+
+                Text(valueText)
+                    .font(.system(size: s * 0.46, weight: .bold, design: .rounded))
+                    .monospacedDigit()
+                    .minimumScaleFactor(0.25)
+                    .lineLimit(1)
+                    .allowsTightening(true)
+                    .widgetAccentable()
+                    .padding(.horizontal, max(2, s * 0.08))
+
+                Image(systemName: iconSystemName)
+                    .font(.system(size: iconSize, weight: .semibold, design: .rounded))
+                    .widgetAccentable()
+                    // Place icon so its *bottom edge* is exactly 1px above the bottom.
+                    .position(
+                        x: geo.size.width / 2,
+                        y: geo.size.height - iconBottomInset - (iconSize / 2)
+                    )
+            }
+        }
+    }
+}
+
 private struct IntakeProgressEntry: TimelineEntry {
     let date: Date
     let total: Double
@@ -58,14 +128,13 @@ struct WaterProgressWidget: Widget {
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: WaterProgressProvider()) { entry in
-            Gauge(value: entry.fraction) {
-                Image(systemName: "drop.fill")
-            } currentValueLabel: {
-                Text("\(Int(entry.total.rounded()))")
-                    .font(.system(size: 11, weight: .bold))
-            }
-            .gaugeStyle(.accessoryCircular)
-            .tint(.blue)
+            BatteryStyleCircularContent(
+                iconSystemName: "drop.fill",
+                valueText: entry.total.formatted(.number.precision(.fractionLength(0...1))),
+                fraction: entry.fraction,
+                progressColor: .blue
+            )
+            .containerBackground(for: .widget) { }
             .widgetURL(URL(string: "intaketracker://open/water")!)
         }
         .configurationDisplayName("Water Progress")
@@ -79,14 +148,13 @@ struct CaffeineProgressWidget: Widget {
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: CaffeineProgressProvider()) { entry in
-            Gauge(value: entry.fraction) {
-                Image(systemName: "cup.and.saucer.fill")
-            } currentValueLabel: {
-                Text("\(Int(entry.total.rounded()))")
-                    .font(.system(size: 11, weight: .bold))
-            }
-            .gaugeStyle(.accessoryCircular)
-            .tint(.brown)
+            BatteryStyleCircularContent(
+                iconSystemName: "cup.and.saucer.fill",
+                valueText: entry.total.formatted(.number.precision(.fractionLength(0...1))),
+                fraction: entry.fraction,
+                progressColor: .brown
+            )
+            .containerBackground(for: .widget) { }
             .widgetURL(URL(string: "intaketracker://open/caffeine")!)
         }
         .configurationDisplayName("Caffeine Progress")
@@ -94,4 +162,3 @@ struct CaffeineProgressWidget: Widget {
         .supportedFamilies([.accessoryCircular])
     }
 }
-

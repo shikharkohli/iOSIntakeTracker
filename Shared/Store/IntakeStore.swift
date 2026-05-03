@@ -1,5 +1,8 @@
 import Foundation
 import Combine
+#if canImport(WidgetKit)
+import WidgetKit
+#endif
 
 @MainActor
 final class IntakeStore: ObservableObject {
@@ -104,5 +107,11 @@ final class IntakeStore: ObservableObject {
         group.set(waterTarget > 0 ? waterTarget : 8, forKey: "target.waterGlasses")
         let caffeineTarget = defaults.double(forKey: "target.caffeineMg")
         group.set(caffeineTarget > 0 ? caffeineTarget : 400, forKey: "target.caffeineMg")
+
+        // Prompt WidgetKit to re-read from the App Group. Without this, the
+        // progress ring can appear stale until the system decides to reload.
+        #if canImport(WidgetKit)
+        WidgetCenter.shared.reloadAllTimelines()
+        #endif
     }
 }

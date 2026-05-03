@@ -21,7 +21,10 @@ private struct QuickLaunchView: View {
 
     var body: some View {
         Label(title, systemImage: systemImage)
-            .font(.headline)
+            // Match system accessory complication typography.
+            .font(.system(.body, design: .rounded).weight(.semibold))
+            .widgetAccentable()
+            .containerBackground(for: .widget) { }
     }
 }
 

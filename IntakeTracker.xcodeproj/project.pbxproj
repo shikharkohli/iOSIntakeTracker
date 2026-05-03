@@ -116,7 +116,7 @@
 		B0244CD2A76DF2C2F4A10AAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B351AB57C5168FA90FF77FC0 /* Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatting.swift; sourceTree = "<group>"; };
 		B586537B6F41ECD2CEA1C39A /* IntakeTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = IntakeTracker.entitlements; sourceTree = "<group>"; };
-		BC14CE64A441F6B314472A3A /* IntakeTracker.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = IntakeTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC14CE64A441F6B314472A3A /* IntakeTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IntakeTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE07C3761146E14D96AA0767 /* IntakeTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntakeTrackerApp.swift; sourceTree = "<group>"; };
 		CC231AD48309E5FFE1A3121F /* IntakeTracker_ComplicationsBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntakeTracker_ComplicationsBundle.swift; sourceTree = "<group>"; };
 		D11BBC74C5D372C270BDFDA2 /* WatchSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSummaryView.swift; sourceTree = "<group>"; };
@@ -339,11 +339,9 @@
 						ProvisioningStyle = Automatic;
 					};
 					446612D235B94BDE61B59764 = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 					4719F4557AEAF99CC5294675 = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -468,6 +466,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "IntakeTracker Watch App/IntakeTracker Watch App.entitlements";
+				DEVELOPMENT_TEAM = 6JNJZZ4V2L;
 				INFOPLIST_KEY_WKApplication = YES;
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.example.IntakeTracker;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.IntakeTracker.watchkitapp;
@@ -482,6 +481,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "IntakeTracker Watch App/IntakeTracker Watch App.entitlements";
+				DEVELOPMENT_TEAM = 6JNJZZ4V2L;
 				INFOPLIST_KEY_WKApplication = YES;
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.example.IntakeTracker;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.IntakeTracker.watchkitapp;
@@ -525,7 +525,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
+				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";
@@ -559,6 +559,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_ASSET_PATHS = "\"IntakeTracker/Preview Content\"";
+				DEVELOPMENT_TEAM = 6JNJZZ4V2L;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -608,7 +609,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
+				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = "";
@@ -687,6 +688,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_ASSET_PATHS = "\"IntakeTracker/Preview Content\"";
+				DEVELOPMENT_TEAM = 6JNJZZ4V2L;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
