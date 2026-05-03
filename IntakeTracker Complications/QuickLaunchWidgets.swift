@@ -31,7 +31,7 @@ struct WaterQuickLaunchWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: QuickLaunchProvider()) { _ in
             QuickLaunchView(title: "Water", systemImage: "drop.fill")
-                .widgetURL(URL(string: "intaketracker://quicklog/water?glasses=1")!)
+                .widgetURL(URL(string: "intaketracker://open/water")!)
         }
         .configurationDisplayName("Log Water")
         .description("Open the app to quickly log water.")
@@ -45,7 +45,7 @@ struct CaffeineQuickLaunchWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: QuickLaunchProvider()) { _ in
             QuickLaunchView(title: "Caffeine", systemImage: "cup.and.saucer.fill")
-                .widgetURL(URL(string: "intaketracker://quicklog/caffeine?mg=95&note=Coffee")!)
+                .widgetURL(URL(string: "intaketracker://open/caffeine")!)
         }
         .configurationDisplayName("Log Caffeine")
         .description("Open the app to quickly log caffeine.")
@@ -59,11 +59,10 @@ struct FullnessQuickLaunchWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: QuickLaunchProvider()) { _ in
             QuickLaunchView(title: "Meal", systemImage: "fork.knife")
-                .widgetURL(URL(string: "intaketracker://quicklog/fullness?level=3")!)
+                .widgetURL(URL(string: "intaketracker://open/fullness")!)
         }
         .configurationDisplayName("Log Fullness")
         .description("Open the app to quickly log meal fullness.")
         .supportedFamilies([.accessoryCircular, .accessoryRectangular, .accessoryInline, .accessoryCorner])
     }
 }
-

@@ -7,5 +7,7 @@ struct IntakeTrackerComplicationsBundle: WidgetBundle {
         WaterQuickLaunchWidget()
         CaffeineQuickLaunchWidget()
         FullnessQuickLaunchWidget()
+        WaterProgressWidget()
+        CaffeineProgressWidget()
     }
 }

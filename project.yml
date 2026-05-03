@@ -50,6 +50,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.example.IntakeTracker.watchkitapp
         INFOPLIST_KEY_WKCompanionAppBundleIdentifier: com.example.IntakeTracker
         INFOPLIST_KEY_WKApplication: YES
+        CODE_SIGN_ENTITLEMENTS: "IntakeTracker Watch App/IntakeTracker Watch App.entitlements"
         TARGETED_DEVICE_FAMILY: "4"
 
   IntakeTracker Complications:
