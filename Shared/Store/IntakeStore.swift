@@ -87,5 +87,22 @@ final class IntakeStore: ObservableObject {
         if let data = try? JSONEncoder().encode(entries) {
             defaults.set(data, forKey: storageKey)
         }
+        writeComplicationData()
+    }
+
+    // Writes today's totals and targets to the shared App Group so the
+    // Widget Extension (complications) can read them without the full store.
+    // The App Group identifier must match the one in IntakeComplications.swift
+    // and in both targets' Signing & Capabilities.
+    func writeComplicationData() {
+        guard let group = UserDefaults(suiteName: "group.com.intaketracker.shared") else { return }
+        let today = Date()
+        group.set(total(of: .water, on: today), forKey: "complication.waterTotal")
+        group.set(total(of: .caffeine, on: today), forKey: "complication.caffeineTotal")
+        // Mirror the current targets so the widget can show the correct goal line
+        let waterTarget = defaults.double(forKey: "target.waterGlasses")
+        group.set(waterTarget > 0 ? waterTarget : 8, forKey: "target.waterGlasses")
+        let caffeineTarget = defaults.double(forKey: "target.caffeineMg")
+        group.set(caffeineTarget > 0 ? caffeineTarget : 400, forKey: "target.caffeineMg")
     }
 }

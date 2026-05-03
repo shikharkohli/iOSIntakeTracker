@@ -1,4 +1,5 @@
 import SwiftUI
+import WidgetKit
 
 @main
 struct IntakeTrackerWatchApp: App {
@@ -12,6 +13,13 @@ struct IntakeTrackerWatchApp: App {
         WindowGroup {
             WatchRootView()
                 .environmentObject(store)
+                .onOpenURL { url in
+                    QuickLogDeepLinkHandler.handle(url: url, store: store)
+                }
+                .onReceive(store.$entries) { _ in
+                    // Reload complication timelines whenever tracked data changes
+                    WidgetCenter.shared.reloadAllTimelines()
+                }
         }
     }
 }

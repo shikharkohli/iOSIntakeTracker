@@ -36,13 +36,28 @@ final class SyncService: NSObject {
     }
 
     /// Sends daily targets from iOS to the watch. Only called from iOS.
-    func sendTargets(water: Double, caffeine: Double, weightKg: Double, waistCm: Double) {
+    func sendTargets(
+        water: Double,
+        caffeine: Double,
+        weightKg: Double,
+        waistCm: Double,
+        breakfastStartMinutes: Int,
+        lunchStartMinutes: Int,
+        snackStartMinutes: Int,
+        dinnerStartMinutes: Int,
+        lateNightStartMinutes: Int
+    ) {
         guard let session = session, session.activationState == .activated else { return }
         let targets: [String: Double] = [
             "waterGlasses": water,
             "caffeineMg": caffeine,
             "weightKg": weightKg,
-            "waistCm": waistCm
+            "waistCm": waistCm,
+            "breakfastStartMinutes": Double(breakfastStartMinutes),
+            "lunchStartMinutes": Double(lunchStartMinutes),
+            "snackStartMinutes": Double(snackStartMinutes),
+            "dinnerStartMinutes": Double(dinnerStartMinutes),
+            "lateNightStartMinutes": Double(lateNightStartMinutes)
         ]
         guard let data = try? JSONEncoder().encode(targets) else { return }
         session.transferUserInfo(["targets": data])
@@ -77,6 +92,21 @@ extension SyncService: WCSessionDelegate {
                 if let v = targets["caffeineMg"] { UserDefaults.standard.set(v, forKey: "target.caffeineMg") }
                 if let v = targets["weightKg"] { UserDefaults.standard.set(v, forKey: "target.weightKg") }
                 if let v = targets["waistCm"] { UserDefaults.standard.set(v, forKey: "target.waistCm") }
+                if let v = targets["breakfastStartMinutes"] {
+                    UserDefaults.standard.set(Int(v), forKey: MealWindowKeys.breakfastStartMinutes)
+                }
+                if let v = targets["lunchStartMinutes"] {
+                    UserDefaults.standard.set(Int(v), forKey: MealWindowKeys.lunchStartMinutes)
+                }
+                if let v = targets["snackStartMinutes"] {
+                    UserDefaults.standard.set(Int(v), forKey: MealWindowKeys.snackStartMinutes)
+                }
+                if let v = targets["dinnerStartMinutes"] {
+                    UserDefaults.standard.set(Int(v), forKey: MealWindowKeys.dinnerStartMinutes)
+                }
+                if let v = targets["lateNightStartMinutes"] {
+                    UserDefaults.standard.set(Int(v), forKey: MealWindowKeys.lateNightStartMinutes)
+                }
             }
         }
     }

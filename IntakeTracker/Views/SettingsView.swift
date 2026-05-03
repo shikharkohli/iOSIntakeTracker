@@ -5,6 +5,11 @@ struct SettingsView: View {
     @AppStorage("target.caffeineMg") private var caffeineTarget: Double = 400
     @AppStorage("target.weightKg") private var weightTargetKg: Double = 70
     @AppStorage("target.waistCm") private var waistTargetCm: Double = 85
+    @AppStorage(MealWindowKeys.breakfastStartMinutes) private var breakfastStartMinutes: Int = MealWindowDefaults.breakfastStart
+    @AppStorage(MealWindowKeys.lunchStartMinutes) private var lunchStartMinutes: Int = MealWindowDefaults.lunchStart
+    @AppStorage(MealWindowKeys.snackStartMinutes) private var snackStartMinutes: Int = MealWindowDefaults.snackStart
+    @AppStorage(MealWindowKeys.dinnerStartMinutes) private var dinnerStartMinutes: Int = MealWindowDefaults.dinnerStart
+    @AppStorage(MealWindowKeys.lateNightStartMinutes) private var lateNightStartMinutes: Int = MealWindowDefaults.lateNightStart
     @Environment(\.dismiss) private var dismiss
 
     // Bindings in display units; storage is always metric
@@ -101,6 +106,24 @@ struct SettingsView: View {
                 } footer: {
                     Text("Goals are used as reference lines in Trends charts. Targets sync to Apple Watch automatically.")
                 }
+
+                Section("Meal Auto-Select Windows") {
+                    Stepper(value: $breakfastStartMinutes, in: 0...(23 * 60), step: 30) {
+                        LabeledContent("Breakfast starts", value: minuteLabel(breakfastStartMinutes))
+                    }
+                    Stepper(value: $lunchStartMinutes, in: 0...(23 * 60), step: 30) {
+                        LabeledContent("Lunch starts", value: minuteLabel(lunchStartMinutes))
+                    }
+                    Stepper(value: $snackStartMinutes, in: 0...(23 * 60), step: 30) {
+                        LabeledContent("Snack starts", value: minuteLabel(snackStartMinutes))
+                    }
+                    Stepper(value: $dinnerStartMinutes, in: 0...(23 * 60), step: 30) {
+                        LabeledContent("Dinner starts", value: minuteLabel(dinnerStartMinutes))
+                    }
+                    Stepper(value: $lateNightStartMinutes, in: 0...(23 * 60), step: 30) {
+                        LabeledContent("Late night starts", value: minuteLabel(lateNightStartMinutes))
+                    }
+                }
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
@@ -113,7 +136,18 @@ struct SettingsView: View {
             .onChange(of: caffeineTarget) { syncTargets() }
             .onChange(of: weightTargetKg) { syncTargets() }
             .onChange(of: waistTargetCm) { syncTargets() }
+            .onChange(of: breakfastStartMinutes) { syncTargets() }
+            .onChange(of: lunchStartMinutes) { syncTargets() }
+            .onChange(of: snackStartMinutes) { syncTargets() }
+            .onChange(of: dinnerStartMinutes) { syncTargets() }
+            .onChange(of: lateNightStartMinutes) { syncTargets() }
         }
+    }
+
+    private func minuteLabel(_ minutes: Int) -> String {
+        let h = ((minutes / 60) % 24 + 24) % 24
+        let m = abs(minutes % 60)
+        return String(format: "%02d:%02d", h, m)
     }
 
     private func syncTargets() {
@@ -121,7 +155,14 @@ struct SettingsView: View {
             water: waterTarget,
             caffeine: caffeineTarget,
             weightKg: weightTargetKg,
-            waistCm: waistTargetCm
+            waistCm: waistTargetCm,
+            breakfastStartMinutes: breakfastStartMinutes,
+            lunchStartMinutes: lunchStartMinutes,
+            snackStartMinutes: snackStartMinutes,
+            dinnerStartMinutes: dinnerStartMinutes,
+            lateNightStartMinutes: lateNightStartMinutes
         )
+        // Refresh the complication data so the gauge goal lines update immediately
+        IntakeStore.shared.writeComplicationData()
     }
 }
