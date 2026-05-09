@@ -5,6 +5,8 @@ struct WatchWaistView: View {
     @EnvironmentObject private var store: IntakeStore
     @State private var valueCm: Double = 85
     @State private var initialized = false
+    @State private var isLogging = false
+    @State private var feedbackMessage: String?
 
     private var step: Double { Formatting.usesMetric ? 0.5 : 1.27 } // ~0.5 in in cm
     private let minCm: Double = 40
@@ -35,14 +37,27 @@ struct WatchWaistView: View {
             .tint(.purple)
 
             Button {
+                guard !isLogging else { return }
+                isLogging = true
                 store.add(IntakeEntry(type: .waist, amount: valueCm))
                 WKInterfaceDevice.current().play(.success)
+                feedbackMessage = "Logged"
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                    feedbackMessage = nil
+                    isLogging = false
+                }
             } label: {
                 Label("Log", systemImage: "checkmark")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
+            .disabled(isLogging)
             .tint(.purple)
+            if let feedbackMessage {
+                Text(feedbackMessage)
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(.green)
+            }
         }
         .padding(.horizontal, 4)
         .onAppear {

@@ -52,6 +52,8 @@ private struct MealFullnessPickerView: View {
     @EnvironmentObject private var store: IntakeStore
     @Environment(\.dismiss) private var dismiss
     let meal: MealType
+    @State private var isLogging = false
+    @State private var feedbackMessage: String?
 
     var body: some View {
         // ScrollView is fine inside a detail view — crown scrolling here is expected
@@ -62,12 +64,19 @@ private struct MealFullnessPickerView: View {
 
                 ForEach(FullnessLevel.allCases) { level in
                     Button {
+                        guard !isLogging else { return }
+                        isLogging = true
                         store.add(IntakeEntry(type: .fullness,
                                               amount: Double(level.rawValue),
                                               note: level.label,
                                               meal: meal))
                         WKInterfaceDevice.current().play(.success)
-                        dismiss()
+                        feedbackMessage = "Logged \(level.label)"
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.55) {
+                            feedbackMessage = nil
+                            isLogging = false
+                            dismiss()
+                        }
                     } label: {
                         HStack(spacing: 6) {
                             Text(level.emoji)
@@ -79,8 +88,14 @@ private struct MealFullnessPickerView: View {
                                 .foregroundStyle(.secondary)
                         }
                     }
+                    .disabled(isLogging)
                     .tint(.orange)
                     .buttonStyle(.borderedProminent)
+                }
+                if let feedbackMessage {
+                    Text(feedbackMessage)
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(.green)
                 }
             }
             .padding(.horizontal, 2)

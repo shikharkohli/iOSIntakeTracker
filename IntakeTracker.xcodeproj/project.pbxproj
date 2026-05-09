@@ -10,11 +10,13 @@
 		05A0145DA18C1C89E1F47BD0 /* QuickLogIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5134B5EA5F4F18B5586AEBEA /* QuickLogIntents.swift */; };
 		0C2BFAFE5348131DC50A616B /* QuickLaunchWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54231B396C8C2E7211DF030 /* QuickLaunchWidgets.swift */; };
 		10CD9FDF66F64350C56BF88A /* IntakeTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68F17049F9F39573D4D92F /* IntakeTrackerApp.swift */; };
+		14301D30B666A3713FD4E262 /* CaffeineKineticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6D0ECCAE8D7ABE931BBB3E /* CaffeineKineticsTests.swift */; };
 		174D7E006C16A3D5751F35CF /* IntakeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE6FD1511030DA6948E9698 /* IntakeStore.swift */; };
 		1F8BEE6146709966C1A88E50 /* WatchFullnessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA05016D1E33A06C17F2C7AF /* WatchFullnessView.swift */; };
 		23E768B3BD578221247E722B /* IntakeEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D86F6AEB050D0F31CB3BCF /* IntakeEntry.swift */; };
 		26B80842B39E195BD0652B8B /* IntakeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE6FD1511030DA6948E9698 /* IntakeStore.swift */; };
 		27576F7F9D29DC57039D067D /* IntakeEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D86F6AEB050D0F31CB3BCF /* IntakeEntry.swift */; };
+		29F3FC6D5F7C1E608AD2D907 /* MealAutoSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9EDC2B01D9EA46BB72B467 /* MealAutoSelector.swift */; };
 		2AAB6B44C1CED091858812D8 /* SyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7BB6CC581435D00D4A203D /* SyncService.swift */; };
 		2BCFF1BD2907B2E4BF35B5C6 /* ProgressWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE41058664D7E7991788A44 /* ProgressWidgets.swift */; };
 		2E1288E31814474EBC910FF5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0AD83A813F2FDBE5B73D5B /* SettingsView.swift */; };
@@ -24,9 +26,13 @@
 		39F970680529B35CB3181C82 /* IntakeTracker Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 3A650F6997474CD73F336A53 /* IntakeTracker Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		421D57874C3519AFC8815596 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB7ADF9B8CF5339499B6515A /* RootView.swift */; };
 		5BDDA9704A44FC01908C5AED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A49B60CEE28A7216CD91BF12 /* Assets.xcassets */; };
+		5D4636959C501E4D855E5DFC /* CaffeineKinetics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D2C0F65961081917A8C2AE /* CaffeineKinetics.swift */; };
 		6369538F5E6130FEB64C5373 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BD96C4F807327FE6AA8DDA /* DashboardView.swift */; };
 		691A6339A63F064101ACC999 /* TrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394799DE2554516C3CFA2CE3 /* TrendsView.swift */; };
+		6D14070F9A94A84EE595620C /* SyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7BB6CC581435D00D4A203D /* SyncService.swift */; };
 		702509756E881679BE74D1B6 /* IntakeEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D86F6AEB050D0F31CB3BCF /* IntakeEntry.swift */; };
+		74636D3906A943525A1E88E9 /* IntakeEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D86F6AEB050D0F31CB3BCF /* IntakeEntry.swift */; };
+		7715BDA4A2E5422D91D53A25 /* CaffeineKinetics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D2C0F65961081917A8C2AE /* CaffeineKinetics.swift */; };
 		81F3D7BC7A8860E3042FBC3A /* MealAutoSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9EDC2B01D9EA46BB72B467 /* MealAutoSelector.swift */; };
 		83F54F49518B0A5B35B52DF6 /* WatchRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5A57A60F6341C83DBE21BC /* WatchRootView.swift */; };
 		85083D2F4FB8FFF9F77ACF82 /* IntakeTracker_ComplicationsBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC231AD48309E5FFE1A3121F /* IntakeTracker_ComplicationsBundle.swift */; };
@@ -35,10 +41,14 @@
 		9E28806995C5BA8F683A298E /* IntakeTracker Complications.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 473C5A527377BE86951E8CDF /* IntakeTracker Complications.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		9F932DF8D048BDF737F3A1DD /* SyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7BB6CC581435D00D4A203D /* SyncService.swift */; };
 		A1E6EF20D21239F924B43667 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9546FFF09B066C3694FA895F /* HistoryView.swift */; };
+		A43F969E7F96E95F253B9A1C /* CaffeineKinetics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D2C0F65961081917A8C2AE /* CaffeineKinetics.swift */; };
 		A9BC40236728D0F6E740A8C5 /* QuickLogIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5134B5EA5F4F18B5586AEBEA /* QuickLogIntents.swift */; };
+		B716FFB14AA1296ED0C86939 /* QuickLogIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5134B5EA5F4F18B5586AEBEA /* QuickLogIntents.swift */; };
+		B85C9449E26EA156339DDD1F /* Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = B351AB57C5168FA90FF77FC0 /* Formatting.swift */; };
 		BAA17E7C591E0F73B3BC778B /* WatchWaistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD73764F03843DE98584257 /* WatchWaistView.swift */; };
 		BAD7E001AD1F117FBB858909 /* WatchDeepLinkRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 759FC5A642D78C238B5A3CA0 /* WatchDeepLinkRouter.swift */; };
 		BB844E2D1B0567F563C02C33 /* WatchWeightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B45B570E32C2DEB270697B /* WatchWeightView.swift */; };
+		BBE5C46C5793F4EB19A73856 /* IntakeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE6FD1511030DA6948E9698 /* IntakeStore.swift */; };
 		C737EE771CEC4DF501C22C4A /* MealAutoSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9EDC2B01D9EA46BB72B467 /* MealAutoSelector.swift */; };
 		D6CF2F867EC1B86CF6DDD2C5 /* QuickLogIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5134B5EA5F4F18B5586AEBEA /* QuickLogIntents.swift */; };
 		DCE5CCD4189C79BE9DEDD03D /* IntakeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE6FD1511030DA6948E9698 /* IntakeStore.swift */; };
@@ -47,6 +57,7 @@
 		E60D232C7F86ED1DA697D9B2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94FC3E420685F6E42B5473A4 /* Assets.xcassets */; };
 		E6BDA47A1C86F0E50F23539F /* Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = B351AB57C5168FA90FF77FC0 /* Formatting.swift */; };
 		EA436FF779357A86BDB52550 /* IntakeTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE07C3761146E14D96AA0767 /* IntakeTrackerApp.swift */; };
+		ECB0DAD835CBEF0C7114F105 /* CaffeineKinetics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D2C0F65961081917A8C2AE /* CaffeineKinetics.swift */; };
 		F5FE7E9B89C88F73A3C60A1D /* SyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7BB6CC581435D00D4A203D /* SyncService.swift */; };
 /* End PBXBuildFile section */
 
@@ -57,6 +68,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 059DB81787A5095F2993A0F7;
 			remoteInfo = "IntakeTracker Complications";
+		};
+		26A0656803A2B30277F57F7C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E071BE3A1D390229846093F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4719F4557AEAF99CC5294675;
+			remoteInfo = IntakeTracker;
 		};
 		AB066A4D69E847F61BCCB1F1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -93,6 +111,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		18D2C0F65961081917A8C2AE /* CaffeineKinetics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaffeineKinetics.swift; sourceTree = "<group>"; };
 		1E68F17049F9F39573D4D92F /* IntakeTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntakeTrackerApp.swift; sourceTree = "<group>"; };
 		23AEE4344B69E67BD580AF22 /* WatchWaterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchWaterView.swift; sourceTree = "<group>"; };
 		2CD73764F03843DE98584257 /* WatchWaistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchWaistView.swift; sourceTree = "<group>"; };
@@ -105,6 +124,7 @@
 		5FE41058664D7E7991788A44 /* ProgressWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressWidgets.swift; sourceTree = "<group>"; };
 		647B37563C2B7499865188DC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		6A5A57A60F6341C83DBE21BC /* WatchRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchRootView.swift; sourceTree = "<group>"; };
+		6C6D0ECCAE8D7ABE931BBB3E /* CaffeineKineticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaffeineKineticsTests.swift; sourceTree = "<group>"; };
 		6EE6FD1511030DA6948E9698 /* IntakeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntakeStore.swift; sourceTree = "<group>"; };
 		759FC5A642D78C238B5A3CA0 /* WatchDeepLinkRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchDeepLinkRouter.swift; sourceTree = "<group>"; };
 		7C0AD83A813F2FDBE5B73D5B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -116,7 +136,7 @@
 		B0244CD2A76DF2C2F4A10AAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B351AB57C5168FA90FF77FC0 /* Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatting.swift; sourceTree = "<group>"; };
 		B586537B6F41ECD2CEA1C39A /* IntakeTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = IntakeTracker.entitlements; sourceTree = "<group>"; };
-		BC14CE64A441F6B314472A3A /* IntakeTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IntakeTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC14CE64A441F6B314472A3A /* IntakeTracker.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = IntakeTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE07C3761146E14D96AA0767 /* IntakeTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntakeTrackerApp.swift; sourceTree = "<group>"; };
 		CC231AD48309E5FFE1A3121F /* IntakeTracker_ComplicationsBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntakeTracker_ComplicationsBundle.swift; sourceTree = "<group>"; };
 		D11BBC74C5D372C270BDFDA2 /* WatchSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSummaryView.swift; sourceTree = "<group>"; };
@@ -124,6 +144,7 @@
 		D7D86F6AEB050D0F31CB3BCF /* IntakeEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntakeEntry.swift; sourceTree = "<group>"; };
 		D8BD96C4F807327FE6AA8DDA /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		F55F9346836F89D109AF0088 /* WatchCaffeineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchCaffeineView.swift; sourceTree = "<group>"; };
+		F7B6394B90883E22E73D2825 /* IntakeTrackerTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = IntakeTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA05016D1E33A06C17F2C7AF /* WatchFullnessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchFullnessView.swift; sourceTree = "<group>"; };
 		FB7ADF9B8CF5339499B6515A /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		FC7BB6CC581435D00D4A203D /* SyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncService.swift; sourceTree = "<group>"; };
@@ -157,6 +178,7 @@
 		4A15BC7D46D318B33E19C0CE /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				18D2C0F65961081917A8C2AE /* CaffeineKinetics.swift */,
 				D7D86F6AEB050D0F31CB3BCF /* IntakeEntry.swift */,
 				7E9EDC2B01D9EA46BB72B467 /* MealAutoSelector.swift */,
 			);
@@ -183,6 +205,14 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		6DD5111C7F6C5AE178AE2FD9 /* IntakeTrackerTests */ = {
+			isa = PBXGroup;
+			children = (
+				6C6D0ECCAE8D7ABE931BBB3E /* CaffeineKineticsTests.swift */,
+			);
+			path = IntakeTrackerTests;
+			sourceTree = "<group>";
+		};
 		83F02C673515B8CE8C655E9B /* Store */ = {
 			isa = PBXGroup;
 			children = (
@@ -197,6 +227,7 @@
 				473C5A527377BE86951E8CDF /* IntakeTracker Complications.appex */,
 				3A650F6997474CD73F336A53 /* IntakeTracker Watch App.app */,
 				BC14CE64A441F6B314472A3A /* IntakeTracker.app */,
+				F7B6394B90883E22E73D2825 /* IntakeTrackerTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -261,6 +292,7 @@
 				65F83BF707E40A0B2388C829 /* IntakeTracker */,
 				E56DD7DCD8CBA79BF6960114 /* IntakeTracker Complications */,
 				41D05BC1ABC5410133FDB807 /* IntakeTracker Watch App */,
+				6DD5111C7F6C5AE178AE2FD9 /* IntakeTrackerTests */,
 				06E2B3E38AECD4AFC42292D5 /* Shared */,
 				8C58EA3D95B50CDD82B2FF3D /* Products */,
 			);
@@ -326,6 +358,24 @@
 			productReference = BC14CE64A441F6B314472A3A /* IntakeTracker.app */;
 			productType = "com.apple.product-type.application";
 		};
+		C095BFDD897370C96B3403EB /* IntakeTrackerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B9A223A1E0F5BDD4B7825D47 /* Build configuration list for PBXNativeTarget "IntakeTrackerTests" */;
+			buildPhases = (
+				98C633E5C7EB168C2EF8B676 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BE918E13580C44F308EDEB4C /* PBXTargetDependency */,
+			);
+			name = IntakeTrackerTests;
+			packageProductDependencies = (
+			);
+			productName = IntakeTrackerTests;
+			productReference = F7B6394B90883E22E73D2825 /* IntakeTrackerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -336,12 +386,19 @@
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					059DB81787A5095F2993A0F7 = {
+						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 					446612D235B94BDE61B59764 = {
+						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 					4719F4557AEAF99CC5294675 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					C095BFDD897370C96B3403EB = {
+						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -363,6 +420,7 @@
 				4719F4557AEAF99CC5294675 /* IntakeTracker */,
 				059DB81787A5095F2993A0F7 /* IntakeTracker Complications */,
 				446612D235B94BDE61B59764 /* IntakeTracker Watch App */,
+				C095BFDD897370C96B3403EB /* IntakeTrackerTests */,
 			);
 		};
 /* End PBXProject section */
@@ -392,6 +450,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D4636959C501E4D855E5DFC /* CaffeineKinetics.swift in Sources */,
 				6369538F5E6130FEB64C5373 /* DashboardView.swift in Sources */,
 				E6BDA47A1C86F0E50F23539F /* Formatting.swift in Sources */,
 				A1E6EF20D21239F924B43667 /* HistoryView.swift in Sources */,
@@ -411,6 +470,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ECB0DAD835CBEF0C7114F105 /* CaffeineKinetics.swift in Sources */,
 				9B0D9E99DE7E2DAE1F81FE7D /* Formatting.swift in Sources */,
 				23E768B3BD578221247E722B /* IntakeEntry.swift in Sources */,
 				26B80842B39E195BD0652B8B /* IntakeStore.swift in Sources */,
@@ -423,10 +483,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		98C633E5C7EB168C2EF8B676 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7715BDA4A2E5422D91D53A25 /* CaffeineKinetics.swift in Sources */,
+				14301D30B666A3713FD4E262 /* CaffeineKineticsTests.swift in Sources */,
+				B85C9449E26EA156339DDD1F /* Formatting.swift in Sources */,
+				74636D3906A943525A1E88E9 /* IntakeEntry.swift in Sources */,
+				BBE5C46C5793F4EB19A73856 /* IntakeStore.swift in Sources */,
+				29F3FC6D5F7C1E608AD2D907 /* MealAutoSelector.swift in Sources */,
+				B716FFB14AA1296ED0C86939 /* QuickLogIntents.swift in Sources */,
+				6D14070F9A94A84EE595620C /* SyncService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B326B617A8D74C182FE50B2E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A43F969E7F96E95F253B9A1C /* CaffeineKinetics.swift in Sources */,
 				333EF5572D3EC94750464F2D /* Formatting.swift in Sources */,
 				702509756E881679BE74D1B6 /* IntakeEntry.swift in Sources */,
 				174D7E006C16A3D5751F35CF /* IntakeStore.swift in Sources */,
@@ -458,6 +534,11 @@
 			target = 446612D235B94BDE61B59764 /* IntakeTracker Watch App */;
 			targetProxy = AB066A4D69E847F61BCCB1F1 /* PBXContainerItemProxy */;
 		};
+		BE918E13580C44F308EDEB4C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4719F4557AEAF99CC5294675 /* IntakeTracker */;
+			targetProxy = 26A0656803A2B30277F57F7C /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -466,7 +547,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "IntakeTracker Watch App/IntakeTracker Watch App.entitlements";
-				DEVELOPMENT_TEAM = 6JNJZZ4V2L;
 				INFOPLIST_KEY_WKApplication = YES;
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.example.IntakeTracker;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.IntakeTracker.watchkitapp;
@@ -476,12 +556,28 @@
 			};
 			name = Release;
 		};
+		2C252D3224B608C2CF9D0A8C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.IntakeTrackerTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/IntakeTracker.app/IntakeTracker";
+			};
+			name = Release;
+		};
 		4BBEA1E91EE43314C93366CF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "IntakeTracker Watch App/IntakeTracker Watch App.entitlements";
-				DEVELOPMENT_TEAM = 6JNJZZ4V2L;
 				INFOPLIST_KEY_WKApplication = YES;
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.example.IntakeTracker;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.IntakeTracker.watchkitapp;
@@ -525,7 +621,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = YES;
+				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";
@@ -557,9 +653,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = IntakeTracker/IntakeTracker.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_ASSET_PATHS = "\"IntakeTracker/Preview Content\"";
-				DEVELOPMENT_TEAM = 6JNJZZ4V2L;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -609,7 +705,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = YES;
+				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = "";
@@ -648,7 +744,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "IntakeTracker Complications/IntakeTracker Complications.entitlements";
-				DEVELOPMENT_TEAM = 6JNJZZ4V2L;
 				INFOPLIST_FILE = "IntakeTracker Complications/Info.plist";
 				INFOPLIST_KEY_NSExtensionPointIdentifier = "com.apple.widgetkit-extension";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -667,7 +762,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "IntakeTracker Complications/IntakeTracker Complications.entitlements";
-				DEVELOPMENT_TEAM = 6JNJZZ4V2L;
 				INFOPLIST_FILE = "IntakeTracker Complications/Info.plist";
 				INFOPLIST_KEY_NSExtensionPointIdentifier = "com.apple.widgetkit-extension";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -682,13 +776,30 @@
 			};
 			name = Release;
 		};
+		EF81CEF0B14C51C4C7648A34 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.IntakeTrackerTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/IntakeTracker.app/IntakeTracker";
+			};
+			name = Debug;
+		};
 		F2E66023509CFC87488D2D49 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = IntakeTracker/IntakeTracker.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_ASSET_PATHS = "\"IntakeTracker/Preview Content\"";
-				DEVELOPMENT_TEAM = 6JNJZZ4V2L;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -730,6 +841,15 @@
 			buildConfigurations = (
 				941E504F031901E5B10C263A /* Debug */,
 				50573A5178649583CBD8C843 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B9A223A1E0F5BDD4B7825D47 /* Build configuration list for PBXNativeTarget "IntakeTrackerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EF81CEF0B14C51C4C7648A34 /* Debug */,
+				2C252D3224B608C2CF9D0A8C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

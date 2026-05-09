@@ -4,6 +4,8 @@ import WatchKit
 struct WatchWaterView: View {
     @EnvironmentObject private var store: IntakeStore
     @AppStorage("target.waterGlasses") private var target: Double = 8
+    @State private var isLogging = false
+    @State private var feedbackMessage: String?
 
     private var total: Double { store.total(of: .water) }
 
@@ -20,6 +22,11 @@ struct WatchWaterView: View {
                 Text("of \(Formatting.glasses(target))")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
+                if let feedbackMessage {
+                    Text(feedbackMessage)
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(.green)
+                }
 
                 HStack(spacing: 8) {
                     quickButton(glasses: 0.5, label: "½")
@@ -33,12 +40,20 @@ struct WatchWaterView: View {
 
     private func quickButton(glasses: Double, label: String, wide: Bool = false) -> some View {
         Button {
+            guard !isLogging else { return }
+            isLogging = true
             store.add(IntakeEntry(type: .water, amount: glasses, note: label))
-            WKInterfaceDevice.current().play(.click)
+            WKInterfaceDevice.current().play(.success)
+            feedbackMessage = "Logged \(label)"
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                feedbackMessage = nil
+                isLogging = false
+            }
         } label: {
             Label(label, systemImage: "drop.fill")
                 .frame(maxWidth: wide ? .infinity : nil)
         }
+        .disabled(isLogging)
         .tint(.blue)
     }
 }

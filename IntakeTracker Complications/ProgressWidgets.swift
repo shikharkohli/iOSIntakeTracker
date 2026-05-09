@@ -96,7 +96,9 @@ private struct WaterProgressProvider: TimelineProvider {
 
     private func current() -> IntakeProgressEntry {
         let d = UserDefaults(suiteName: appGroupID) ?? .standard
-        let total = d.double(forKey: "complication.waterTotal")
+        let todayStart = Calendar.current.startOfDay(for: Date()).timeIntervalSince1970
+        let storedDayStart = d.double(forKey: "complication.dayStart")
+        let total = (storedDayStart == todayStart) ? d.double(forKey: "complication.waterTotal") : 0
         let target = { let v = d.double(forKey: "target.waterGlasses"); return v > 0 ? v : 8 }()
         return IntakeProgressEntry(date: Date(), total: total, target: target)
     }
@@ -112,12 +114,13 @@ private struct CaffeineProgressProvider: TimelineProvider {
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<IntakeProgressEntry>) -> Void) {
-        completion(Timeline(entries: [current()], policy: .after(Date().addingTimeInterval(15 * 60))))
+        completion(Timeline(entries: [current()], policy: .after(Date().addingTimeInterval(5 * 60))))
     }
 
     private func current() -> IntakeProgressEntry {
         let d = UserDefaults(suiteName: appGroupID) ?? .standard
-        let total = d.double(forKey: "complication.caffeineTotal")
+        // Debug-friendly read: use the exact body-load value written by the app.
+        let total = d.double(forKey: "complication.caffeineBodyLoad")
         let target = { let v = d.double(forKey: "target.caffeineMg"); return v > 0 ? v : 400 }()
         return IntakeProgressEntry(date: Date(), total: total, target: target)
     }
@@ -152,7 +155,7 @@ struct CaffeineProgressWidget: Widget {
                 iconSystemName: "cup.and.saucer.fill",
                 valueText: entry.total.formatted(.number.precision(.fractionLength(0...1))),
                 fraction: entry.fraction,
-                progressColor: .brown
+                progressColor: caffeineColor(for: entry.fraction)
             )
             .containerBackground(for: .widget) { }
             .widgetURL(URL(string: "intaketracker://open/caffeine")!)
@@ -161,4 +164,30 @@ struct CaffeineProgressWidget: Widget {
         .description("Caffeine ring progress for today.")
         .supportedFamilies([.accessoryCircular])
     }
+}
+
+private func caffeineColor(for ratio: Double) -> Color {
+    let t = max(0, min(1, ratio))
+    let green = SIMD3<Double>(0.20, 0.78, 0.35)
+    let yellow = SIMD3<Double>(0.98, 0.85, 0.20)
+    let orange = SIMD3<Double>(0.96, 0.54, 0.17)
+    let red = SIMD3<Double>(0.88, 0.20, 0.20)
+
+    let color: SIMD3<Double>
+    if t <= 0.5 {
+        let local = t / 0.5
+        color = simdMix(green, yellow, local)
+    } else if t <= 0.8 {
+        let local = (t - 0.5) / 0.3
+        color = simdMix(yellow, orange, local)
+    } else {
+        let local = (t - 0.8) / 0.2
+        color = simdMix(orange, red, local)
+    }
+
+    return Color(red: color.x, green: color.y, blue: color.z)
+}
+
+private func simdMix(_ a: SIMD3<Double>, _ b: SIMD3<Double>, _ t: Double) -> SIMD3<Double> {
+    a + (b - a) * SIMD3<Double>(repeating: t)
 }
