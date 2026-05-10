@@ -1,76 +1,55 @@
 import SwiftUI
-import WatchKit
 
 struct WatchWaistView: View {
     @EnvironmentObject private var store: IntakeStore
-    @State private var valueCm: Double = 85
-    @State private var initialized = false
-    @State private var isLogging = false
-    @State private var feedbackMessage: String?
+    @AppStorage("target.waistCm") private var target: Double = 80
+    @State private var crownValue: Double = 80
+    @FocusState private var inputFocused: Bool
 
-    private var step: Double { Formatting.usesMetric ? 0.5 : 1.27 } // ~0.5 in in cm
-    private let minCm: Double = 40
-    private let maxCm: Double = 200
-
-    var body: some View {
-        VStack(spacing: 6) {
-            Text("Waist").font(.headline)
-            Text(Formatting.waist(cm: valueCm))
-                .font(.title3.bold())
-                .foregroundStyle(.purple)
-                .monospacedDigit()
-
-            HStack(spacing: 6) {
-                Button {
-                    adjust(-step)
-                } label: {
-                    Image(systemName: "minus")
-                        .frame(maxWidth: .infinity)
-                }
-                Button {
-                    adjust(step)
-                } label: {
-                    Image(systemName: "plus")
-                        .frame(maxWidth: .infinity)
-                }
-            }
-            .tint(.purple)
-
-            Button {
-                guard !isLogging else { return }
-                isLogging = true
-                store.add(IntakeEntry(type: .waist, amount: valueCm))
-                WKInterfaceDevice.current().play(.success)
-                feedbackMessage = "Logged"
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                    feedbackMessage = nil
-                    isLogging = false
-                }
-            } label: {
-                Label("Log", systemImage: "checkmark")
-                    .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.borderedProminent)
-            .disabled(isLogging)
-            .tint(.purple)
-            if let feedbackMessage {
-                Text(feedbackMessage)
-                    .font(.caption2.weight(.semibold))
-                    .foregroundStyle(.green)
-            }
-        }
-        .padding(.horizontal, 4)
-        .onAppear {
-            guard !initialized else { return }
-            initialized = true
-            if let last = store.latestEntry(type: .waist) {
-                valueCm = last.amount
-            }
-        }
+    private var latest: Double {
+        store.latestEntry(type: .waist)?.amount ?? 0
     }
 
-    private func adjust(_ delta: Double) {
-        valueCm = min(maxCm, max(minCm, valueCm + delta))
-        WKInterfaceDevice.current().play(.click)
+    private var ringFraction: Double {
+        guard target > 0, latest > 0 else { return 0 }
+        return max(0, 1 - min(abs(latest - target) / target, 1))
+    }
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: WatchTheme.Spacing.stack) {
+                HeroRing(
+                    metric: .waist,
+                    value: ringFraction * target,
+                    target: target,
+                    caption: latest > 0 ? "cm" : "tap to log",
+                    centerOverride: latest > 0 ? Formatting.waist(cm: latest) : "—"
+                )
+
+                Text(Formatting.waist(cm: crownValue))
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .monospacedDigit()
+                    .foregroundStyle(WatchTheme.Color.waist)
+                    .focusable()
+                    .focused($inputFocused)
+                    .digitalCrownRotation(
+                        $crownValue,
+                        from: 40, through: 150, by: 0.5,
+                        sensitivity: .medium,
+                        isContinuous: false,
+                        isHapticFeedbackEnabled: true
+                    )
+
+                QuickActionChip(label: "Save", wide: true, tint: WatchTheme.Color.waist) {
+                    store.add(IntakeEntry(type: .waist, amount: crownValue))
+                    Haptic.tapLog()
+                }
+            }
+            .padding(.horizontal, WatchTheme.Spacing.pageH)
+            .onAppear {
+                crownValue = latest > 0 ? latest : target
+                inputFocused = true
+            }
+        }
     }
 }
