@@ -135,6 +135,24 @@ final class IntakeStore: ObservableObject {
         let caffeineTarget = defaults.double(forKey: "target.caffeineMg")
         group.set(caffeineTarget > 0 ? caffeineTarget : 400, forKey: "target.caffeineMg")
 
+        // Latest log timestamps for Smart Stack relevance
+        let lastWater = entries.first(where: { $0.type == .water })?.timestamp
+        let lastCaffeine = entries.first(where: { $0.type == .caffeine })?.timestamp
+        group.set(lastWater?.timeIntervalSince1970 ?? 0, forKey: "complication.lastWaterLogged")
+        group.set(lastCaffeine?.timeIntervalSince1970 ?? 0, forKey: "complication.lastCaffeineLogged")
+
+        // Fullness count + latest weight for new circular widgets
+        let mealsLogged = MealType.allCases.reduce(0) { count, meal in
+            count + (mealFullness(for: meal, on: today) == nil ? 0 : 1)
+        }
+        group.set(mealsLogged, forKey: "complication.fullnessCount")
+        let latestWeight = latestEntry(type: .weight)?.amount ?? 0
+        group.set(latestWeight, forKey: "complication.weightLatest")
+
+        // Mirror weight target
+        let weightTarget = defaults.double(forKey: "target.weightKg")
+        group.set(weightTarget > 0 ? weightTarget : 70, forKey: "target.weightKg")
+
         // Prompt WidgetKit to re-read from the App Group. Without this, the
         // progress ring can appear stale until the system decides to reload.
         #if canImport(WidgetKit)
