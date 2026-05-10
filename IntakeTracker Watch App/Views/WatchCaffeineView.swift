@@ -30,6 +30,7 @@ struct WatchCaffeineView: View {
                         ForEach(CaffeinePreset.presets) { preset in
                             QuickActionChip(
                                 label: "\(preset.name) · \(Int(preset.milligrams))mg",
+                                glyph: preset.systemImage,
                                 wide: true,
                                 tint: WatchTheme.Color.caffeine
                             ) {

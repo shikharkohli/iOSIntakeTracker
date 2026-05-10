@@ -40,7 +40,7 @@ struct WatchWeightView: View {
                         isHapticFeedbackEnabled: true
                     )
 
-                QuickActionChip(label: "Save", wide: true, tint: WatchTheme.Color.weight) {
+                QuickActionChip(label: "Save", glyph: "checkmark.circle.fill", wide: true, tint: WatchTheme.Color.weight) {
                     store.add(IntakeEntry(type: .weight, amount: crownValue))
                     Haptic.tapLog()
                 }

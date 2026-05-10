@@ -20,7 +20,7 @@ struct QuickActionChip: View {
             .foregroundStyle(tint)
             .padding(.vertical, 10)
             .padding(.horizontal, 14)
-            .frame(maxWidth: wide ? .infinity : nil, minHeight: 44)
+            .frame(minWidth: 44, maxWidth: wide ? .infinity : nil, minHeight: 44)
             .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: WatchTheme.Radius.chip))
             .overlay(
                 RoundedRectangle(cornerRadius: WatchTheme.Radius.chip)

@@ -18,10 +18,10 @@ struct WatchWaterView: View {
                 )
 
                 HStack(spacing: WatchTheme.Spacing.chipGap) {
-                    QuickActionChip(label: "½", tint: WatchTheme.Color.water) { log(0.5) }
-                    QuickActionChip(label: "1",  tint: WatchTheme.Color.water) { log(1.0) }
+                    QuickActionChip(label: "½", glyph: "drop", wide: true, tint: WatchTheme.Color.water) { log(0.5) }
+                    QuickActionChip(label: "1", glyph: "drop.fill", wide: true, tint: WatchTheme.Color.water) { log(1.0) }
                 }
-                QuickActionChip(label: "Bottle", wide: true, tint: WatchTheme.Color.water) { log(2.0) }
+                QuickActionChip(label: "Bottle", glyph: "waterbottle.fill", wide: true, tint: WatchTheme.Color.water) { log(2.0) }
             }
             .padding(.horizontal, WatchTheme.Spacing.pageH)
         }
