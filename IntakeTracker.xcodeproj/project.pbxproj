@@ -41,6 +41,19 @@
 		75EF26E32FB0EF77009F3D2B /* MetricKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EF26E02FB0EF77009F3D2B /* MetricKind.swift */; };
 		75EF26E42FB0EF77009F3D2B /* MetricKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EF26E02FB0EF77009F3D2B /* MetricKind.swift */; };
 		75EF26E62FB0EF97009F3D2B /* MetricKindTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EF26E52FB0EF97009F3D2B /* MetricKindTests.swift */; };
+		75EF26E82FB0F40F009F3D2B /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EF26E72FB0F40F009F3D2B /* Haptics.swift */; };
+		75EF26E92FB0F40F009F3D2B /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EF26E72FB0F40F009F3D2B /* Haptics.swift */; };
+		75EF26EA2FB0F40F009F3D2B /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EF26E72FB0F40F009F3D2B /* Haptics.swift */; };
+		75EF26EB2FB0F40F009F3D2B /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EF26E72FB0F40F009F3D2B /* Haptics.swift */; };
+		75EF26ED2FB0F422009F3D2B /* HapticDebounceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EF26EC2FB0F422009F3D2B /* HapticDebounceTests.swift */; };
+		75EF26EF2FB0F512009F3D2B /* HeroRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EF26EE2FB0F512009F3D2B /* HeroRing.swift */; };
+		75EF26F02FB0F512009F3D2B /* HeroRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EF26EE2FB0F512009F3D2B /* HeroRing.swift */; };
+		75EF26F12FB0F512009F3D2B /* HeroRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EF26EE2FB0F512009F3D2B /* HeroRing.swift */; };
+		75EF26F22FB0F512009F3D2B /* HeroRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EF26EE2FB0F512009F3D2B /* HeroRing.swift */; };
+		75EF26F32FB0F600009F3D2B /* MiniRingRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EF26F72FB0F600009F3D2B /* MiniRingRow.swift */; };
+		75EF26F42FB0F600009F3D2B /* MiniRingRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EF26F72FB0F600009F3D2B /* MiniRingRow.swift */; };
+		75EF26F52FB0F600009F3D2B /* MiniRingRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EF26F72FB0F600009F3D2B /* MiniRingRow.swift */; };
+		75EF26F62FB0F600009F3D2B /* MiniRingRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EF26F72FB0F600009F3D2B /* MiniRingRow.swift */; };
 		7715BDA4A2E5422D91D53A25 /* CaffeineKinetics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D2C0F65961081917A8C2AE /* CaffeineKinetics.swift */; };
 		81F3D7BC7A8860E3042FBC3A /* MealAutoSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9EDC2B01D9EA46BB72B467 /* MealAutoSelector.swift */; };
 		83F54F49518B0A5B35B52DF6 /* WatchRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5A57A60F6341C83DBE21BC /* WatchRootView.swift */; };
@@ -139,6 +152,10 @@
 		75EF26DB2FB0EF53009F3D2B /* WatchTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchTheme.swift; sourceTree = "<group>"; };
 		75EF26E02FB0EF77009F3D2B /* MetricKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricKind.swift; sourceTree = "<group>"; };
 		75EF26E52FB0EF97009F3D2B /* MetricKindTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricKindTests.swift; sourceTree = "<group>"; };
+		75EF26E72FB0F40F009F3D2B /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
+		75EF26EC2FB0F422009F3D2B /* HapticDebounceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticDebounceTests.swift; sourceTree = "<group>"; };
+		75EF26EE2FB0F512009F3D2B /* HeroRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroRing.swift; sourceTree = "<group>"; };
+		75EF26F72FB0F600009F3D2B /* MiniRingRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniRingRow.swift; sourceTree = "<group>"; };
 		7C0AD83A813F2FDBE5B73D5B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		7E9EDC2B01D9EA46BB72B467 /* MealAutoSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealAutoSelector.swift; sourceTree = "<group>"; };
 		86C0A4AABBE0BCC999502CB5 /* IntakeTracker Watch App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "IntakeTracker Watch App.entitlements"; sourceTree = "<group>"; };
@@ -166,6 +183,9 @@
 		06E2B3E38AECD4AFC42292D5 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				75EF26EE2FB0F512009F3D2B /* HeroRing.swift */,
+				75EF26F72FB0F600009F3D2B /* MiniRingRow.swift */,
+				75EF26E72FB0F40F009F3D2B /* Haptics.swift */,
 				75EF26E02FB0EF77009F3D2B /* MetricKind.swift */,
 				75EF26DB2FB0EF53009F3D2B /* WatchTheme.swift */,
 				B351AB57C5168FA90FF77FC0 /* Formatting.swift */,
@@ -222,6 +242,7 @@
 		6DD5111C7F6C5AE178AE2FD9 /* IntakeTrackerTests */ = {
 			isa = PBXGroup;
 			children = (
+				75EF26EC2FB0F422009F3D2B /* HapticDebounceTests.swift */,
 				75EF26E52FB0EF97009F3D2B /* MetricKindTests.swift */,
 				6C6D0ECCAE8D7ABE931BBB3E /* CaffeineKineticsTests.swift */,
 			);
@@ -469,11 +490,14 @@
 				75EF26DF2FB0EF53009F3D2B /* WatchTheme.swift in Sources */,
 				6369538F5E6130FEB64C5373 /* DashboardView.swift in Sources */,
 				E6BDA47A1C86F0E50F23539F /* Formatting.swift in Sources */,
+				75EF26E92FB0F40F009F3D2B /* Haptics.swift in Sources */,
 				A1E6EF20D21239F924B43667 /* HistoryView.swift in Sources */,
 				27576F7F9D29DC57039D067D /* IntakeEntry.swift in Sources */,
 				DCE5CCD4189C79BE9DEDD03D /* IntakeStore.swift in Sources */,
 				EA436FF779357A86BDB52550 /* IntakeTrackerApp.swift in Sources */,
 				81F3D7BC7A8860E3042FBC3A /* MealAutoSelector.swift in Sources */,
+				75EF26F12FB0F512009F3D2B /* HeroRing.swift in Sources */,
+				75EF26F32FB0F600009F3D2B /* MiniRingRow.swift in Sources */,
 				D6CF2F867EC1B86CF6DDD2C5 /* QuickLogIntents.swift in Sources */,
 				421D57874C3519AFC8815596 /* RootView.swift in Sources */,
 				2E1288E31814474EBC910FF5 /* SettingsView.swift in Sources */,
@@ -494,9 +518,12 @@
 				26B80842B39E195BD0652B8B /* IntakeStore.swift in Sources */,
 				85083D2F4FB8FFF9F77ACF82 /* IntakeTracker_ComplicationsBundle.swift in Sources */,
 				930ABA980593588C6C4B86A6 /* MealAutoSelector.swift in Sources */,
+				75EF26EA2FB0F40F009F3D2B /* Haptics.swift in Sources */,
 				2BCFF1BD2907B2E4BF35B5C6 /* ProgressWidgets.swift in Sources */,
 				0C2BFAFE5348131DC50A616B /* QuickLaunchWidgets.swift in Sources */,
 				05A0145DA18C1C89E1F47BD0 /* QuickLogIntents.swift in Sources */,
+				75EF26F22FB0F512009F3D2B /* HeroRing.swift in Sources */,
+				75EF26F42FB0F600009F3D2B /* MiniRingRow.swift in Sources */,
 				75EF26DD2FB0EF53009F3D2B /* WatchTheme.swift in Sources */,
 				9F932DF8D048BDF737F3A1DD /* SyncService.swift in Sources */,
 			);
@@ -506,15 +533,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75EF26EB2FB0F40F009F3D2B /* Haptics.swift in Sources */,
 				7715BDA4A2E5422D91D53A25 /* CaffeineKinetics.swift in Sources */,
 				14301D30B666A3713FD4E262 /* CaffeineKineticsTests.swift in Sources */,
 				B85C9449E26EA156339DDD1F /* Formatting.swift in Sources */,
 				75EF26E12FB0EF77009F3D2B /* MetricKind.swift in Sources */,
 				75EF26E62FB0EF97009F3D2B /* MetricKindTests.swift in Sources */,
+				75EF26ED2FB0F422009F3D2B /* HapticDebounceTests.swift in Sources */,
 				75EF26DC2FB0EF53009F3D2B /* WatchTheme.swift in Sources */,
 				74636D3906A943525A1E88E9 /* IntakeEntry.swift in Sources */,
 				BBE5C46C5793F4EB19A73856 /* IntakeStore.swift in Sources */,
 				29F3FC6D5F7C1E608AD2D907 /* MealAutoSelector.swift in Sources */,
+				75EF26EF2FB0F512009F3D2B /* HeroRing.swift in Sources */,
+				75EF26F52FB0F600009F3D2B /* MiniRingRow.swift in Sources */,
 				B716FFB14AA1296ED0C86939 /* QuickLogIntents.swift in Sources */,
 				6D14070F9A94A84EE595620C /* SyncService.swift in Sources */,
 			);
@@ -535,11 +566,14 @@
 				2E2E71BF62B381D0B2DF3CCB /* WatchCaffeineView.swift in Sources */,
 				BAD7E001AD1F117FBB858909 /* WatchDeepLinkRouter.swift in Sources */,
 				1F8BEE6146709966C1A88E50 /* WatchFullnessView.swift in Sources */,
+				75EF26F02FB0F512009F3D2B /* HeroRing.swift in Sources */,
+				75EF26F62FB0F600009F3D2B /* MiniRingRow.swift in Sources */,
 				83F54F49518B0A5B35B52DF6 /* WatchRootView.swift in Sources */,
 				DE8BE7CC655BF7EA72A27D1F /* WatchSummaryView.swift in Sources */,
 				75EF26E42FB0EF77009F3D2B /* MetricKind.swift in Sources */,
 				BAA17E7C591E0F73B3BC778B /* WatchWaistView.swift in Sources */,
 				75EF26DE2FB0EF53009F3D2B /* WatchTheme.swift in Sources */,
+				75EF26E82FB0F40F009F3D2B /* Haptics.swift in Sources */,
 				3525EC97C72F21DC741D3021 /* WatchWaterView.swift in Sources */,
 				BB844E2D1B0567F563C02C33 /* WatchWeightView.swift in Sources */,
 			);
