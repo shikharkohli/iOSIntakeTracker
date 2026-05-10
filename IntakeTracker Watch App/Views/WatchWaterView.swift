@@ -1,59 +1,41 @@
 import SwiftUI
-import WatchKit
 
 struct WatchWaterView: View {
     @EnvironmentObject private var store: IntakeStore
     @AppStorage("target.waterGlasses") private var target: Double = 8
     @State private var isLogging = false
-    @State private var feedbackMessage: String?
 
     private var total: Double { store.total(of: .water) }
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 8) {
-                Text("Water")
-                    .font(.headline)
-                Text(Formatting.glasses(total))
-                    .font(.title3.bold())
-                    .foregroundStyle(.blue)
-                ProgressView(value: min(total, target), total: target)
-                    .tint(.blue)
-                Text("of \(Formatting.glasses(target))")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                if let feedbackMessage {
-                    Text(feedbackMessage)
-                        .font(.caption2.weight(.semibold))
-                        .foregroundStyle(.green)
-                }
+            VStack(spacing: WatchTheme.Spacing.stack) {
+                HeroRing(
+                    metric: .water,
+                    value: total,
+                    target: target,
+                    caption: "of \(Formatting.glasses(target))"
+                )
 
-                HStack(spacing: 8) {
-                    quickButton(glasses: 0.5, label: "½")
-                    quickButton(glasses: 1.0, label: "1")
+                HStack(spacing: WatchTheme.Spacing.chipGap) {
+                    QuickActionChip(label: "½", tint: WatchTheme.Color.water) { log(0.5) }
+                    QuickActionChip(label: "1",  tint: WatchTheme.Color.water) { log(1.0) }
                 }
-                quickButton(glasses: 2.0, label: "Bottle", wide: true)
+                QuickActionChip(label: "Bottle", wide: true, tint: WatchTheme.Color.water) { log(2.0) }
             }
-            .padding(.horizontal, 4)
+            .padding(.horizontal, WatchTheme.Spacing.pageH)
         }
     }
 
-    private func quickButton(glasses: Double, label: String, wide: Bool = false) -> some View {
-        Button {
-            guard !isLogging else { return }
-            isLogging = true
-            store.add(IntakeEntry(type: .water, amount: glasses, note: label))
-            WKInterfaceDevice.current().play(.success)
-            feedbackMessage = "Logged \(label)"
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                feedbackMessage = nil
-                isLogging = false
-            }
-        } label: {
-            Label(label, systemImage: "drop.fill")
-                .frame(maxWidth: wide ? .infinity : nil)
+    private func log(_ glasses: Double) {
+        guard !isLogging else { return }
+        isLogging = true
+        let pre = total
+        store.add(IntakeEntry(type: .water, amount: glasses))
+        Haptic.tapLog()
+        if pre < target, total >= target {
+            Haptic.goalReached(.water)
         }
-        .disabled(isLogging)
-        .tint(.blue)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { isLogging = false }
     }
 }
