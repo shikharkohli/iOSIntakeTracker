@@ -1,68 +1,41 @@
 import SwiftUI
-import WatchKit
 
 struct WatchCaffeineView: View {
     @EnvironmentObject private var store: IntakeStore
     @AppStorage("target.caffeineMg") private var target: Double = 400
-    @AppStorage(CaffeineKinetics.halfLifeKey) private var halfLifeHours: Double = CaffeineKinetics.defaultHalfLifeHours
     @State private var isLogging = false
-    @State private var feedbackMessage: String?
 
     private var total: Double { store.total(of: .caffeine) }
-    private var bodyLoad: Double {
-        CaffeineKinetics.currentBodyLoad(entries: store.entries, halfLifeHours: halfLifeHours)
-    }
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 6) {
-                    Text("Caffeine")
-                        .font(.headline)
-                    Text(Formatting.mg(total))
-                        .font(.title3.bold())
-                        .foregroundStyle(.brown)
-                    ProgressView(value: min(total, target), total: target)
-                        .tint(.brown)
-                    Text("of \(Formatting.mg(target))")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                    Text("In body: \(Formatting.mg(bodyLoad))")
-                        .font(.caption2.weight(.semibold))
-                        .foregroundStyle(.brown)
-                    if let feedbackMessage {
-                        Text(feedbackMessage)
-                            .font(.caption2.weight(.semibold))
-                            .foregroundStyle(.green)
-                    }
+            VStack(spacing: WatchTheme.Spacing.stack) {
+                HeroRing(
+                    metric: .caffeine,
+                    value: total,
+                    target: target,
+                    caption: "of \(Formatting.mg(target))"
+                )
 
-                    ForEach(CaffeinePreset.presets) { preset in
-                        Button {
-                            guard !isLogging else { return }
-                            isLogging = true
-                            store.add(IntakeEntry(type: .caffeine, amount: preset.milligrams, note: preset.name))
-                            WKInterfaceDevice.current().play(.success)
-                            feedbackMessage = "Logged \(preset.name)"
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                                feedbackMessage = nil
-                                isLogging = false
-                            }
-                        } label: {
-                            HStack {
-                                Image(systemName: preset.systemImage)
-                                Text(preset.name)
-                                Spacer()
-                                Text("\(Int(preset.milligrams))")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                        .disabled(isLogging)
-                        .tint(.brown)
-                    }
+                HStack(spacing: WatchTheme.Spacing.chipGap) {
+                    QuickActionChip(label: "Esp", tint: WatchTheme.Color.caffeine) { log(63) }
+                    QuickActionChip(label: "Cup", tint: WatchTheme.Color.caffeine) { log(95) }
                 }
-                .padding(.horizontal, 4)
+                QuickActionChip(label: "Energy", wide: true, tint: WatchTheme.Color.caffeine) { log(160) }
             }
+            .padding(.horizontal, WatchTheme.Spacing.pageH)
         }
+    }
+
+    private func log(_ mg: Double) {
+        guard !isLogging else { return }
+        isLogging = true
+        let pre = total
+        store.add(IntakeEntry(type: .caffeine, amount: mg))
+        Haptic.tapLog()
+        if pre < target, total >= target {
+            Haptic.goalReached(.caffeine)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { isLogging = false }
     }
 }
