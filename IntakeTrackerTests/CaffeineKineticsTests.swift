@@ -31,7 +31,7 @@ final class CaffeineKineticsTests: XCTestCase {
 
         // Rough expected value:
         // 100 * 0.5^(2/5) + 80 * 0.5^(1/5)
-        XCTAssertEqual(load, 137.6, accuracy: 1.0)
+        XCTAssertEqual(load, 145.43, accuracy: 1.0)
     }
 
     func testIgnoresFutureEntries() {
