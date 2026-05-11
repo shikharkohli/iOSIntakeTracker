@@ -3,8 +3,6 @@ import SwiftUI
 struct WatchWaistView: View {
     @EnvironmentObject private var store: IntakeStore
     @AppStorage("target.waistCm") private var target: Double = 80
-    @State private var crownValue: Double = 80
-    @FocusState private var inputFocused: Bool
 
     private var latest: Double {
         store.latestEntry(type: .waist)?.amount ?? 0
@@ -26,30 +24,67 @@ struct WatchWaistView: View {
                     centerOverride: latest > 0 ? Formatting.waist(cm: latest) : "—"
                 )
 
-                Text(Formatting.waist(cm: crownValue))
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
-                    .monospacedDigit()
+                NavigationLink {
+                    WaistPickerView(initial: latest > 0 ? latest : target)
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 12, weight: .semibold))
+                        Text("Log")
+                            .font(.system(size: 14, weight: .semibold))
+                    }
                     .foregroundStyle(WatchTheme.Color.waist)
-                    .focusable()
-                    .focused($inputFocused)
-                    .digitalCrownRotation(
-                        $crownValue,
-                        from: 40, through: 150, by: 0.5,
-                        sensitivity: .medium,
-                        isContinuous: false,
-                        isHapticFeedbackEnabled: true
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 14)
+                    .frame(maxWidth: .infinity, minHeight: 44)
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: WatchTheme.Radius.chip))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: WatchTheme.Radius.chip)
+                            .stroke(WatchTheme.Color.waist.opacity(0.4), lineWidth: 1)
                     )
-
-                QuickActionChip(label: "Save", glyph: "checkmark.circle.fill", wide: true, tint: WatchTheme.Color.waist) {
-                    store.add(IntakeEntry(type: .waist, amount: crownValue))
-                    Haptic.tapLog()
                 }
+                .buttonStyle(.plain)
             }
             .padding(.horizontal, WatchTheme.Spacing.pageH)
-            .onAppear {
-                crownValue = latest > 0 ? latest : target
-                inputFocused = true
+        }
+    }
+}
+
+private struct WaistPickerView: View {
+    @EnvironmentObject private var store: IntakeStore
+    @Environment(\.dismiss) private var dismiss
+    let initial: Double
+    @State private var value: Double
+    @FocusState private var focused: Bool
+
+    init(initial: Double) {
+        self.initial = initial
+        _value = State(initialValue: initial)
+    }
+
+    var body: some View {
+        VStack(spacing: WatchTheme.Spacing.stack) {
+            Text(Formatting.waist(cm: value))
+                .font(.system(size: 22, weight: .bold, design: .rounded))
+                .monospacedDigit()
+                .foregroundStyle(WatchTheme.Color.waist)
+                .focusable()
+                .focused($focused)
+                .digitalCrownRotation(
+                    $value,
+                    from: 40, through: 150, by: 0.5,
+                    sensitivity: .medium,
+                    isContinuous: false,
+                    isHapticFeedbackEnabled: true
+                )
+
+            QuickActionChip(label: "Save", glyph: "checkmark.circle.fill", wide: true, tint: WatchTheme.Color.waist) {
+                store.add(IntakeEntry(type: .waist, amount: value))
+                Haptic.tapLog()
+                dismiss()
             }
         }
+        .padding(.horizontal, WatchTheme.Spacing.pageH)
+        .onAppear { focused = true }
     }
 }

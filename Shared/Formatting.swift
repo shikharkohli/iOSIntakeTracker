@@ -19,6 +19,10 @@ enum Formatting {
         "\(Int(value.rounded())) mg"
     }
 
+    static func mg1(_ value: Double) -> String {
+        String(format: "%.1f mg", value)
+    }
+
     static var usesMetric: Bool {
         Locale.current.measurementSystem == .metric
     }

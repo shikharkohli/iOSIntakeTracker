@@ -7,8 +7,9 @@ struct WatchCaffeineView: View {
     @State private var isLogging = false
 
     private var total: Double { store.total(of: .caffeine) }
-    private var bodyLoad: Double {
-        CaffeineKinetics.currentBodyLoad(entries: store.entries, halfLifeHours: halfLifeHours)
+
+    private func bodyLoad(at now: Date) -> Double {
+        CaffeineKinetics.currentBodyLoad(entries: store.entries, now: now, halfLifeHours: halfLifeHours)
     }
 
     var body: some View {
@@ -22,9 +23,11 @@ struct WatchCaffeineView: View {
                         caption: "of \(Formatting.mg(target))"
                     )
 
-                    Text("In body: \(Formatting.mg(bodyLoad))")
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(WatchTheme.Color.caffeine)
+                    TimelineView(.periodic(from: .now, by: 300)) { context in
+                        Text("In body: \(Formatting.mg1(bodyLoad(at: context.date)))")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(WatchTheme.Color.caffeine)
+                    }
 
                     VStack(spacing: WatchTheme.Spacing.chipGap) {
                         ForEach(CaffeinePreset.presets) { preset in

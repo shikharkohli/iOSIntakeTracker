@@ -3,8 +3,6 @@ import SwiftUI
 struct WatchWeightView: View {
     @EnvironmentObject private var store: IntakeStore
     @AppStorage("target.weightKg") private var target: Double = 70
-    @State private var crownValue: Double = 70
-    @FocusState private var inputFocused: Bool
 
     private var latest: Double {
         store.latestEntry(type: .weight)?.amount ?? 0
@@ -26,30 +24,67 @@ struct WatchWeightView: View {
                     centerOverride: latest > 0 ? Formatting.weight(kg: latest) : "—"
                 )
 
-                Text(Formatting.weight(kg: crownValue))
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
-                    .monospacedDigit()
+                NavigationLink {
+                    WeightPickerView(initial: latest > 0 ? latest : target)
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 12, weight: .semibold))
+                        Text("Log")
+                            .font(.system(size: 14, weight: .semibold))
+                    }
                     .foregroundStyle(WatchTheme.Color.weight)
-                    .focusable()
-                    .focused($inputFocused)
-                    .digitalCrownRotation(
-                        $crownValue,
-                        from: 30, through: 200, by: 0.1,
-                        sensitivity: .medium,
-                        isContinuous: false,
-                        isHapticFeedbackEnabled: true
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 14)
+                    .frame(maxWidth: .infinity, minHeight: 44)
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: WatchTheme.Radius.chip))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: WatchTheme.Radius.chip)
+                            .stroke(WatchTheme.Color.weight.opacity(0.4), lineWidth: 1)
                     )
-
-                QuickActionChip(label: "Save", glyph: "checkmark.circle.fill", wide: true, tint: WatchTheme.Color.weight) {
-                    store.add(IntakeEntry(type: .weight, amount: crownValue))
-                    Haptic.tapLog()
                 }
+                .buttonStyle(.plain)
             }
             .padding(.horizontal, WatchTheme.Spacing.pageH)
-            .onAppear {
-                crownValue = latest > 0 ? latest : target
-                inputFocused = true
+        }
+    }
+}
+
+private struct WeightPickerView: View {
+    @EnvironmentObject private var store: IntakeStore
+    @Environment(\.dismiss) private var dismiss
+    let initial: Double
+    @State private var value: Double
+    @FocusState private var focused: Bool
+
+    init(initial: Double) {
+        self.initial = initial
+        _value = State(initialValue: initial)
+    }
+
+    var body: some View {
+        VStack(spacing: WatchTheme.Spacing.stack) {
+            Text(Formatting.weight(kg: value))
+                .font(.system(size: 22, weight: .bold, design: .rounded))
+                .monospacedDigit()
+                .foregroundStyle(WatchTheme.Color.weight)
+                .focusable()
+                .focused($focused)
+                .digitalCrownRotation(
+                    $value,
+                    from: 30, through: 200, by: 0.1,
+                    sensitivity: .medium,
+                    isContinuous: false,
+                    isHapticFeedbackEnabled: true
+                )
+
+            QuickActionChip(label: "Save", glyph: "checkmark.circle.fill", wide: true, tint: WatchTheme.Color.weight) {
+                store.add(IntakeEntry(type: .weight, amount: value))
+                Haptic.tapLog()
+                dismiss()
             }
         }
+        .padding(.horizontal, WatchTheme.Spacing.pageH)
+        .onAppear { focused = true }
     }
 }
