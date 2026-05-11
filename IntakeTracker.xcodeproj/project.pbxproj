@@ -22,6 +22,7 @@
 		75EF27012FB0F600009F3D2B /* WidgetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EF27022FB0F600009F3D2B /* WidgetData.swift */; };
 		75EF27032FB0F600009F3D2B /* CornerWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EF27042FB0F600009F3D2B /* CornerWidgets.swift */; };
 		75EF27052FB0F600009F3D2B /* InlineWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EF27062FB0F600009F3D2B /* InlineWidgets.swift */; };
+		75EF27072FB0F600009F3D2B /* SmartStackWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EF27082FB0F600009F3D2B /* SmartStackWidgets.swift */; };
 		2E1288E31814474EBC910FF5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0AD83A813F2FDBE5B73D5B /* SettingsView.swift */; };
 		2E2E71BF62B381D0B2DF3CCB /* WatchCaffeineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55F9346836F89D109AF0088 /* WatchCaffeineView.swift */; };
 		333EF5572D3EC94750464F2D /* Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = B351AB57C5168FA90FF77FC0 /* Formatting.swift */; };
@@ -156,6 +157,7 @@
 		75EF27022FB0F600009F3D2B /* WidgetData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetData.swift; sourceTree = "<group>"; };
 		75EF27042FB0F600009F3D2B /* CornerWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CornerWidgets.swift; sourceTree = "<group>"; };
 		75EF27062FB0F600009F3D2B /* InlineWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlineWidgets.swift; sourceTree = "<group>"; };
+		75EF27082FB0F600009F3D2B /* SmartStackWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartStackWidgets.swift; sourceTree = "<group>"; };
 		647B37563C2B7499865188DC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		6A5A57A60F6341C83DBE21BC /* WatchRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchRootView.swift; sourceTree = "<group>"; };
 		6C6D0ECCAE8D7ABE931BBB3E /* CaffeineKineticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaffeineKineticsTests.swift; sourceTree = "<group>"; };
@@ -336,6 +338,7 @@
 				75EF27022FB0F600009F3D2B /* WidgetData.swift */,
 				75EF27042FB0F600009F3D2B /* CornerWidgets.swift */,
 				75EF27062FB0F600009F3D2B /* InlineWidgets.swift */,
+				75EF27082FB0F600009F3D2B /* SmartStackWidgets.swift */,
 			);
 			path = "IntakeTracker Complications";
 			sourceTree = "<group>";
@@ -541,6 +544,7 @@
 				75EF27012FB0F600009F3D2B /* WidgetData.swift in Sources */,
 				75EF27032FB0F600009F3D2B /* CornerWidgets.swift in Sources */,
 				75EF27052FB0F600009F3D2B /* InlineWidgets.swift in Sources */,
+				75EF27072FB0F600009F3D2B /* SmartStackWidgets.swift in Sources */,
 				05A0145DA18C1C89E1F47BD0 /* QuickLogIntents.swift in Sources */,
 				75EF26F22FB0F512009F3D2B /* HeroRing.swift in Sources */,
 				75EF26F42FB0F600009F3D2B /* MiniRingRow.swift in Sources */,

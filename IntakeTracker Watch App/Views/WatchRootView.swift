@@ -22,10 +22,6 @@ struct WatchRootView: View {
                 .tag(Page.caffeine)
             WatchFullnessView()
                 .tag(Page.fullness)
-            WatchWeightView()
-                .tag(Page.weight)
-            WatchWaistView()
-                .tag(Page.waist)
         }
         .tabViewStyle(.verticalPage)
     }

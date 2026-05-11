@@ -11,8 +11,6 @@ struct DashboardView: View {
                     WaterCard()
                     CaffeineCard()
                     FullnessCard()
-                    WeightCard()
-                    WaistCard()
                 }
                 .padding()
             }

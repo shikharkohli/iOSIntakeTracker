@@ -20,12 +20,12 @@ struct WatchWaistView: View {
                     metric: .waist,
                     value: ringFraction * target,
                     target: target,
-                    caption: latest > 0 ? "cm" : "tap to log",
+                    caption: latest > 0 ? (Formatting.usesMetric ? "cm" : "in") : "tap to log",
                     centerOverride: latest > 0 ? Formatting.waist(cm: latest) : "—"
                 )
 
                 NavigationLink {
-                    WaistPickerView(initial: latest > 0 ? latest : target)
+                    WaistPickerView(initialCm: latest > 0 ? latest : target)
                 } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "checkmark.circle.fill")
@@ -53,33 +53,56 @@ struct WatchWaistView: View {
 private struct WaistPickerView: View {
     @EnvironmentObject private var store: IntakeStore
     @Environment(\.dismiss) private var dismiss
-    let initial: Double
-    @State private var value: Double
+    let initialCm: Double
+
+    @State private var displayValue: Double
     @FocusState private var focused: Bool
 
-    init(initial: Double) {
-        self.initial = initial
-        _value = State(initialValue: initial)
+    private var unitLabel: String { Formatting.usesMetric ? "cm" : "in" }
+    private var crownRange: ClosedRange<Double> { Formatting.usesMetric ? 40...150 : 16...60 }
+    private var crownStep: Double { Formatting.usesMetric ? 0.5 : 0.25 }
+
+    init(initialCm: Double) {
+        self.initialCm = initialCm
+        _displayValue = State(initialValue: Formatting.display(fromCm: initialCm))
     }
 
     var body: some View {
         VStack(spacing: WatchTheme.Spacing.stack) {
-            Text(Formatting.waist(cm: value))
-                .font(.system(size: 22, weight: .bold, design: .rounded))
-                .monospacedDigit()
+            TextFieldLink(prompt: Text("Enter \(unitLabel)")) {
+                HStack(spacing: 4) {
+                    Text(String(format: "%.1f", displayValue))
+                        .font(.system(size: 26, weight: .bold, design: .rounded))
+                        .monospacedDigit()
+                    Text(unitLabel)
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(.secondary)
+                }
                 .foregroundStyle(WatchTheme.Color.waist)
-                .focusable()
-                .focused($focused)
-                .digitalCrownRotation(
-                    $value,
-                    from: 40, through: 150, by: 0.5,
-                    sensitivity: .medium,
-                    isContinuous: false,
-                    isHapticFeedbackEnabled: true
-                )
+                .padding(.vertical, 8)
+                .padding(.horizontal, 14)
+                .frame(maxWidth: .infinity)
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: WatchTheme.Radius.chip))
+            } onSubmit: { text in
+                if let v = Double(text.replacingOccurrences(of: ",", with: ".")) {
+                    displayValue = max(crownRange.lowerBound, min(crownRange.upperBound, v))
+                }
+            }
+            .focusable()
+            .focused($focused)
+            .digitalCrownRotation(
+                $displayValue,
+                from: crownRange.lowerBound,
+                through: crownRange.upperBound,
+                by: crownStep,
+                sensitivity: .medium,
+                isContinuous: false,
+                isHapticFeedbackEnabled: true
+            )
 
             QuickActionChip(label: "Save", glyph: "checkmark.circle.fill", wide: true, tint: WatchTheme.Color.waist) {
-                store.add(IntakeEntry(type: .waist, amount: value))
+                let cm = Formatting.cm(fromDisplay: displayValue)
+                store.add(IntakeEntry(type: .waist, amount: cm))
                 Haptic.tapLog()
                 dismiss()
             }

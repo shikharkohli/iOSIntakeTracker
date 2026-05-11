@@ -12,7 +12,7 @@ struct WatchSummaryView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 0) {
-                    ForEach(MetricKind.allCases) { kind in
+                    ForEach(MetricKind.allCases.filter { $0 != .weight && $0 != .waist }) { kind in
                         MiniRingRow(
                             metric: kind,
                             value: currentValue(for: kind),
