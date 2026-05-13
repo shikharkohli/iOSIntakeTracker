@@ -65,6 +65,7 @@ struct TrendsView: View {
                     WeightTrendCard(range: range)
                     WaistTrendCard(range: range)
                     FullnessTrendCard(range: range)
+                    SleepCorrelationCard()
                 }
                 .padding()
             }

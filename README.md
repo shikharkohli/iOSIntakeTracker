@@ -16,6 +16,8 @@ A simple iOS + Apple Watch app for tracking water, caffeine, and post-meal fulln
 
 **Trends** — Chart view with Day / Week / Month / Year selectors. Bar charts for water & caffeine (with goal/limit reference lines), line charts for weight & waist, scatter for fullness.
 
+**Caffeine vs. Sleep** — Opt-in correlation between afternoon caffeine and that night's sleep duration. Reads sleep automatically from Apple Health (Apple Watch records it for you — no extra logging). Hides the chart until ~7 nights of data; shows a plain-language summary alongside the scatter plot once there's enough.
+
 **History** — Day-grouped list on iOS, filter by type, swipe to delete.
 
 **Watch navigation** — Pages swipe vertically and are navigable with the Digital Crown.
@@ -80,5 +82,7 @@ Re-run `xcodegen generate` whenever you add/remove source files.
 
 ## Notes
 
-- All data lives in UserDefaults — uninstalling the app clears history.
-- HealthKit integration is intentionally omitted; "easy inputs" was the explicit design goal.
+- Intake entries live in UserDefaults — uninstalling the app clears history.
+- HealthKit is used for **reading** sleep data only (for the caffeine vs. sleep card). All other tracking stays in UserDefaults to keep the logging UX fast.
+- HealthKit sleep samples don't exist in a fresh Simulator. To test the sleep card without a real Watch, add sleep samples in the iOS Simulator via the Health app, or run on a paired iPhone + Apple Watch.
+- The HealthKit entitlement requires a real signing team for device builds — set yours in Xcode's Signing & Capabilities tab.

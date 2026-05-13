@@ -34,6 +34,8 @@ targets:
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
         INFOPLIST_KEY_WKCompanionAppBundleIdentifier: com.example.IntakeTracker
+        INFOPLIST_KEY_NSHealthShareUsageDescription: "IntakeTracker reads your sleep data to show how caffeine timing affects how well you sleep."
+        CODE_SIGN_ENTITLEMENTS: IntakeTracker/IntakeTracker.entitlements
         DEVELOPMENT_ASSET_PATHS: "\"IntakeTracker/Preview Content\""
         TARGETED_DEVICE_FAMILY: "1,2"
 
