@@ -15,28 +15,28 @@ struct MiniRingRow: View {
         Button {
             onTap?()
         } label: {
-            HStack(spacing: 8) {
+            HStack(spacing: 10) {
                 ZStack {
                     Circle()
-                        .stroke(WatchTheme.Color.track, lineWidth: WatchTheme.Stroke.miniRing)
+                        .stroke(WatchTheme.Color.track, lineWidth: 4)
                     Circle()
                         .trim(from: 0, to: CGFloat(fraction))
-                        .stroke(metric.color, style: StrokeStyle(lineWidth: WatchTheme.Stroke.miniRing, lineCap: .round))
+                        .stroke(metric.color, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                         .rotationEffect(.degrees(-90))
                 }
-                .frame(width: 22, height: 22)
+                .frame(width: 28, height: 28)
 
                 Text(metric.displayName)
-                    .font(.system(size: 12, weight: .medium))
+                    .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(.primary)
                     .frame(maxWidth: .infinity, alignment: .leading)
 
                 Text(metric.format(value))
-                    .font(.system(size: 13, weight: .bold))
+                    .font(.system(size: 17, weight: .bold))
                     .monospacedDigit()
                     .foregroundStyle(metric.color)
             }
-            .padding(.vertical, 6)
+            .padding(.vertical, 10)
             .overlay(alignment: .bottom) {
                 Rectangle()
                     .fill(Color.white.opacity(0.08))

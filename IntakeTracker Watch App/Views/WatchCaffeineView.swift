@@ -5,6 +5,7 @@ struct WatchCaffeineView: View {
     @AppStorage("target.caffeineMg") private var target: Double = 400
     @AppStorage(CaffeineKinetics.halfLifeKey) private var halfLifeHours: Double = CaffeineKinetics.defaultHalfLifeHours
     @State private var isLogging = false
+    @State private var pageIndex: Int = 0
 
     private var total: Double { store.total(of: .caffeine) }
 
@@ -12,60 +13,31 @@ struct WatchCaffeineView: View {
         CaffeineKinetics.currentBodyLoad(entries: store.entries, now: now, halfLifeHours: halfLifeHours)
     }
 
-    private var shortName: [String: String] {
-        ["Coffee": "Coffee", "Espresso": "Espresso", "Tea": "Tea", "Energy Drink": "Energy", "Soda": "Soda"]
-    }
-
     var body: some View {
         NavigationStack {
             VStack(spacing: 6) {
                 TimelineView(.periodic(from: .now, by: 60)) { context in
-                    HeroCompactRing(
+                    CaffeineHeroRing(
                         total: total,
                         target: target,
                         inBody: bodyLoad(at: context.date)
                     )
                 }
+                .frame(height: 100)
 
-                LazyVGrid(
-                    columns: [GridItem(.flexible(), spacing: 4), GridItem(.flexible(), spacing: 4)],
-                    spacing: 4
-                ) {
-                    ForEach(CaffeinePreset.presets) { preset in
-                        presetTile(preset)
+                TabView(selection: $pageIndex) {
+                    ForEach(Array(CaffeinePreset.presets.enumerated()), id: \.offset) { index, preset in
+                        PresetPage(preset: preset) { log(preset) }
+                            .tag(index)
+                            .padding(.horizontal, 4)
                     }
                 }
+                .tabViewStyle(.page(indexDisplayMode: .automatic))
+                .frame(maxHeight: .infinity)
             }
             .padding(.horizontal, 6)
+            .padding(.top, 2)
         }
-    }
-
-    private func presetTile(_ preset: CaffeinePreset) -> some View {
-        Button {
-            log(preset)
-        } label: {
-            VStack(spacing: 1) {
-                Image(systemName: preset.systemImage)
-                    .font(.system(size: 13, weight: .semibold))
-                Text(shortName[preset.name] ?? preset.name)
-                    .font(.system(size: 10, weight: .semibold))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-                Text("\(Int(preset.milligrams))")
-                    .font(.system(size: 9))
-                    .foregroundStyle(.secondary)
-                    .monospacedDigit()
-            }
-            .foregroundStyle(WatchTheme.Color.caffeine)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 4)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: WatchTheme.Radius.tile))
-            .overlay(
-                RoundedRectangle(cornerRadius: WatchTheme.Radius.tile)
-                    .stroke(WatchTheme.Color.caffeine.opacity(0.3), lineWidth: 0.6)
-            )
-        }
-        .buttonStyle(.plain)
     }
 
     private func log(_ preset: CaffeinePreset) {
@@ -81,7 +53,7 @@ struct WatchCaffeineView: View {
     }
 }
 
-private struct HeroCompactRing: View {
+private struct CaffeineHeroRing: View {
     let total: Double
     let target: Double
     let inBody: Double
@@ -94,7 +66,7 @@ private struct HeroCompactRing: View {
     var body: some View {
         ZStack {
             Circle()
-                .stroke(WatchTheme.Color.caffeine.opacity(0.18), lineWidth: 6)
+                .stroke(WatchTheme.Color.caffeine.opacity(0.18), lineWidth: 7)
             Circle()
                 .trim(from: 0, to: CGFloat(max(0, min(1, fraction))))
                 .stroke(
@@ -103,20 +75,70 @@ private struct HeroCompactRing: View {
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     ),
-                    style: StrokeStyle(lineWidth: 6, lineCap: .round)
+                    style: StrokeStyle(lineWidth: 7, lineCap: .round)
                 )
                 .rotationEffect(.degrees(-90))
+
             VStack(spacing: 0) {
                 Text("\(Int(inBody.rounded()))")
-                    .font(.system(size: 22, weight: .bold, design: .rounded))
+                    .font(.system(size: 28, weight: .bold, design: .rounded))
                     .monospacedDigit()
                     .foregroundStyle(WatchTheme.Color.caffeine)
-                Text("mg in body")
-                    .font(.system(size: 8, weight: .semibold))
+                Text("mg")
+                    .font(.system(size: 9, weight: .semibold))
                     .foregroundStyle(.secondary)
+                Text("\(Int(total.rounded())) / \(Int(target.rounded()))")
+                    .font(.system(size: 11, weight: .semibold))
+                    .monospacedDigit()
+                    .foregroundStyle(.secondary)
+                    .padding(.top, 1)
             }
         }
-        .frame(width: 78, height: 78)
-        .padding(.top, 2)
+        .frame(width: 92, height: 92)
+    }
+}
+
+private struct PresetPage: View {
+    let preset: CaffeinePreset
+    let action: () -> Void
+
+    var body: some View {
+        VStack(spacing: 4) {
+            HStack(spacing: 6) {
+                Image(systemName: preset.systemImage)
+                    .font(.system(size: 18, weight: .semibold))
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(preset.name)
+                        .font(.system(size: 14, weight: .semibold))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                    Text("\(Int(preset.milligrams)) mg")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
+                }
+                Spacer()
+            }
+            .foregroundStyle(WatchTheme.Color.caffeine)
+
+            Button(action: action) {
+                HStack(spacing: 4) {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.system(size: 13, weight: .semibold))
+                    Text("Log")
+                        .font(.system(size: 14, weight: .bold))
+                }
+                .foregroundStyle(WatchTheme.Color.caffeine)
+                .frame(maxWidth: .infinity, minHeight: 36)
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: WatchTheme.Radius.chip))
+                .overlay(
+                    RoundedRectangle(cornerRadius: WatchTheme.Radius.chip)
+                        .stroke(WatchTheme.Color.caffeine.opacity(0.5), lineWidth: 1)
+                )
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 6)
     }
 }
