@@ -7,6 +7,7 @@ import WatchConnectivity
 /// `updateApplicationContext` so a freshly launched peer can catch up.
 final class SyncService: NSObject {
     static let shared = SyncService()
+    private static let caffeineHalfLifeKey = "caffeine.halfLifeHours"
 
     private let session: WCSession? = WCSession.isSupported() ? .default : nil
 
@@ -41,6 +42,7 @@ final class SyncService: NSObject {
         caffeine: Double,
         weightKg: Double,
         waistCm: Double,
+        caffeineHalfLifeHours: Double,
         breakfastStartMinutes: Int,
         lunchStartMinutes: Int,
         snackStartMinutes: Int,
@@ -53,6 +55,7 @@ final class SyncService: NSObject {
             "caffeineMg": caffeine,
             "weightKg": weightKg,
             "waistCm": waistCm,
+            "caffeineHalfLifeHours": caffeineHalfLifeHours,
             "breakfastStartMinutes": Double(breakfastStartMinutes),
             "lunchStartMinutes": Double(lunchStartMinutes),
             "snackStartMinutes": Double(snackStartMinutes),
@@ -92,6 +95,7 @@ extension SyncService: WCSessionDelegate {
                 if let v = targets["caffeineMg"] { UserDefaults.standard.set(v, forKey: "target.caffeineMg") }
                 if let v = targets["weightKg"] { UserDefaults.standard.set(v, forKey: "target.weightKg") }
                 if let v = targets["waistCm"] { UserDefaults.standard.set(v, forKey: "target.waistCm") }
+                if let v = targets["caffeineHalfLifeHours"] { UserDefaults.standard.set(v, forKey: Self.caffeineHalfLifeKey) }
                 if let v = targets["breakfastStartMinutes"] {
                     UserDefaults.standard.set(Int(v), forKey: MealWindowKeys.breakfastStartMinutes)
                 }
@@ -107,6 +111,7 @@ extension SyncService: WCSessionDelegate {
                 if let v = targets["lateNightStartMinutes"] {
                     UserDefaults.standard.set(Int(v), forKey: MealWindowKeys.lateNightStartMinutes)
                 }
+                IntakeStore.shared.writeComplicationData()
             }
         }
     }
@@ -114,7 +119,10 @@ extension SyncService: WCSessionDelegate {
     func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
         if let data = applicationContext["snapshot"] as? Data,
            let entries = try? JSONDecoder().decode([IntakeEntry].self, from: data) {
-            Task { @MainActor in IntakeStore.shared.replaceAll(entries) }
+            Task { @MainActor in
+                IntakeStore.shared.replaceAll(entries)
+                IntakeStore.shared.writeComplicationData()
+            }
         }
     }
 }

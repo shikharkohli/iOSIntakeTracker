@@ -29,6 +29,7 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.example.IntakeTracker
+        CODE_SIGN_ENTITLEMENTS: "IntakeTracker/IntakeTracker.entitlements"
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
@@ -62,5 +63,19 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.example.IntakeTracker.watchkitapp.complications
+        CODE_SIGN_ENTITLEMENTS: "IntakeTracker Complications/IntakeTracker Complications.entitlements"
         INFOPLIST_FILE: "IntakeTracker Complications/Info.plist"
         INFOPLIST_KEY_NSExtensionPointIdentifier: "com.apple.widgetkit-extension"
+
+  IntakeTrackerTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: IntakeTrackerTests
+      - path: Shared
+    dependencies:
+      - target: IntakeTracker
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.IntakeTrackerTests
+        GENERATE_INFOPLIST_FILE: YES

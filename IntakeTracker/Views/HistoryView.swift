@@ -3,6 +3,7 @@ import SwiftUI
 struct HistoryView: View {
     @EnvironmentObject private var store: IntakeStore
     @State private var filter: IntakeType? = nil
+    @State private var editingEntry: IntakeEntry?
 
     private var filtered: [IntakeEntry] {
         guard let filter else { return store.entries }
@@ -22,6 +23,12 @@ struct HistoryView: View {
                     Section(header: Text(day.formatted(date: .complete, time: .omitted))) {
                         ForEach(entries) { entry in
                             EntryRow(entry: entry)
+                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                    if Calendar.current.isDateInToday(entry.timestamp) {
+                                        Button("Edit") { editingEntry = entry }
+                                            .tint(.blue)
+                                    }
+                                }
                         }
                         .onDelete { offsets in
                             for index in offsets { store.remove(entries[index]) }
@@ -48,6 +55,13 @@ struct HistoryView: View {
                     } label: {
                         Image(systemName: "line.3.horizontal.decrease.circle")
                     }
+                }
+            }
+            .sheet(item: $editingEntry) { entry in
+                EntryEditSheet(entry: entry) { updated in
+                    store.updateEntry(updated)
+                } onDelete: { deleting in
+                    store.remove(deleting)
                 }
             }
         }
@@ -94,6 +108,166 @@ private struct EntryRow: View {
             return "\(level?.emoji ?? "") \(level?.label ?? "Fullness")"
         case .weight: return Formatting.weight(kg: entry.amount)
         case .waist: return Formatting.waist(cm: entry.amount)
+        }
+    }
+}
+
+private struct EntryEditSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    let entry: IntakeEntry
+    let onSave: (IntakeEntry) -> Void
+    let onDelete: (IntakeEntry) -> Void
+
+    @State private var amount: Double
+    @State private var note: String
+    @State private var meal: MealType
+    @State private var fullness: FullnessLevel
+    @State private var showDeleteConfirmation = false
+
+    init(entry: IntakeEntry, onSave: @escaping (IntakeEntry) -> Void, onDelete: @escaping (IntakeEntry) -> Void) {
+        self.entry = entry
+        self.onSave = onSave
+        self.onDelete = onDelete
+        let initialAmount: Double
+        switch entry.type {
+        case .weight:
+            initialAmount = Formatting.display(fromKg: entry.amount)
+        case .waist:
+            initialAmount = Formatting.display(fromCm: entry.amount)
+        default:
+            initialAmount = entry.amount
+        }
+        _amount = State(initialValue: initialAmount)
+        _note = State(initialValue: entry.note ?? "")
+        _meal = State(initialValue: entry.meal ?? .snack)
+        _fullness = State(initialValue: FullnessLevel(rawValue: Int(entry.amount)) ?? .satisfied)
+    }
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("Type") {
+                    Label(entry.type.displayName, systemImage: entry.type.systemImage)
+                }
+                switch entry.type {
+                case .water:
+                    Section("Amount") {
+                        Stepper(value: $amount, in: 0...30, step: 0.5) {
+                            Text(Formatting.glasses(amount))
+                        }
+                    }
+                    Section("Note") { TextField("Optional", text: $note) }
+                case .caffeine:
+                    Section("Amount") {
+                        Stepper(value: $amount, in: 0...1000, step: 5) {
+                            Text(Formatting.mg(amount))
+                        }
+                    }
+                    Section("Note") { TextField("e.g. Tea, Coffee", text: $note) }
+                case .fullness:
+                    Section("Meal") {
+                        Picker("Meal", selection: $meal) {
+                            ForEach(MealType.allCases) { m in
+                                Text(m.displayName).tag(m)
+                            }
+                        }
+                    }
+                    Section("Fullness") {
+                        Picker("Level", selection: $fullness) {
+                            ForEach(FullnessLevel.allCases) { level in
+                                Text("\(level.emoji) \(level.label)").tag(level)
+                            }
+                        }
+                    }
+                    Section("Note") {
+                        TextField("Optional", text: $note)
+                    }
+                case .weight:
+                    Section("Weight") {
+                        Stepper(value: $amount, in: 20...300, step: Formatting.usesMetric ? 0.5 : 1) {
+                            Text(Formatting.weight(kg: Formatting.kg(fromDisplay: amount)))
+                        }
+                    }
+                case .waist:
+                    Section("Waist") {
+                        Stepper(value: $amount, in: 40...200, step: Formatting.usesMetric ? 0.5 : 0.5) {
+                            Text(Formatting.waist(cm: Formatting.cm(fromDisplay: amount)))
+                        }
+                    }
+                }
+                Section {
+                    Button(role: .destructive) {
+                        showDeleteConfirmation = true
+                    } label: {
+                        Label("Delete Entry", systemImage: "trash")
+                    }
+                }
+            }
+            .navigationTitle("Edit Log")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        let trimmed = note.trimmingCharacters(in: .whitespacesAndNewlines)
+                        let updated = buildUpdatedEntry(trimmedNote: trimmed)
+                        onSave(updated)
+                        dismiss()
+                    }
+                }
+            }
+            .alert("Delete this entry?", isPresented: $showDeleteConfirmation) {
+                Button("Delete", role: .destructive) {
+                    onDelete(entry)
+                    dismiss()
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("This will remove the log from your history.")
+            }
+        }
+    }
+
+    private func buildUpdatedEntry(trimmedNote: String) -> IntakeEntry {
+        switch entry.type {
+        case .fullness:
+            return IntakeEntry(
+                id: entry.id,
+                type: entry.type,
+                amount: Double(fullness.rawValue),
+                timestamp: entry.timestamp,
+                note: trimmedNote.isEmpty ? fullness.label : trimmedNote,
+                meal: meal
+            )
+        case .weight:
+            return IntakeEntry(
+                id: entry.id,
+                type: entry.type,
+                amount: Formatting.kg(fromDisplay: amount),
+                timestamp: entry.timestamp,
+                note: nil,
+                meal: nil
+            )
+        case .waist:
+            return IntakeEntry(
+                id: entry.id,
+                type: entry.type,
+                amount: Formatting.cm(fromDisplay: amount),
+                timestamp: entry.timestamp,
+                note: nil,
+                meal: nil
+            )
+        default:
+            return IntakeEntry(
+                id: entry.id,
+                type: entry.type,
+                amount: amount,
+                timestamp: entry.timestamp,
+                note: trimmedNote.isEmpty ? nil : trimmedNote,
+                meal: entry.meal
+            )
         }
     }
 }

@@ -4,10 +4,13 @@ import SwiftUI
 @main
 struct IntakeTrackerComplicationsBundle: WidgetBundle {
     var body: some Widget {
-        WaterQuickLaunchWidget()
-        CaffeineQuickLaunchWidget()
-        FullnessQuickLaunchWidget()
         WaterProgressWidget()
         CaffeineProgressWidget()
+        WaterRectangularWidget()
+        CaffeineRectangularWidget()
+        WaterCornerWidget()
+        CaffeineCornerWidget()
+        WaterInlineWidget()
+        CaffeineInlineWidget()
     }
 }

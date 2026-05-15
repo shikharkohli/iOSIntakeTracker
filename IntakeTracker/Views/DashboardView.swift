@@ -11,8 +11,6 @@ struct DashboardView: View {
                     WaterCard()
                     CaffeineCard()
                     FullnessCard()
-                    WeightCard()
-                    WaistCard()
                 }
                 .padding()
             }
@@ -92,9 +90,14 @@ private struct WaterCard: View {
 private struct CaffeineCard: View {
     @EnvironmentObject private var store: IntakeStore
     @AppStorage("target.caffeineMg") private var target: Double = 400
+    @AppStorage(CaffeineKinetics.halfLifeKey) private var halfLifeHours: Double = CaffeineKinetics.defaultHalfLifeHours
     @State private var showCustom = false
 
     private var total: Double { store.total(of: .caffeine) }
+
+    private func bodyLoad(at now: Date) -> Double {
+        CaffeineKinetics.currentBodyLoad(entries: store.entries, now: now, halfLifeHours: halfLifeHours)
+    }
 
     var body: some View {
         Card(title: "Caffeine", systemImage: "cup.and.saucer.fill", tint: .brown) {
@@ -116,6 +119,24 @@ private struct CaffeineCard: View {
                 Text("Limit: \(Formatting.mg(target))")
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                TimelineView(.periodic(from: .now, by: 300)) { context in
+                    HStack {
+                        Text("In body now")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Text(Formatting.mg1(bodyLoad(at: context.date)))
+                            .font(.caption.bold())
+                            .monospacedDigit()
+                            .foregroundStyle(.brown)
+                    }
+                }
+                Text("Estimated using \(String(format: "%.1f", halfLifeHours))h half-life")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+
+                CaffeineDecayChart()
+                    .padding(.top, 4)
 
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
                     ForEach(CaffeinePreset.presets) { preset in

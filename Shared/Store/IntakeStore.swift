@@ -16,6 +16,9 @@ final class IntakeStore: ObservableObject {
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
         load()
+        // Keep complication data in sync when the store initializes from disk.
+        // This covers cases where entries are up to date but the widget cache is stale.
+        writeComplicationData()
     }
 
     func add(_ entry: IntakeEntry, broadcast: Bool = true) {
@@ -24,6 +27,8 @@ final class IntakeStore: ObservableObject {
         save()
         if broadcast {
             SyncService.shared.sendEntry(entry)
+            // Also push a full snapshot to reduce propagation delay for widgets.
+            SyncService.shared.sendSnapshot(entries)
         }
     }
 
@@ -31,6 +36,8 @@ final class IntakeStore: ObservableObject {
         entries.removeAll { $0.id == entry.id }
         save()
         SyncService.shared.sendDelete(id: entry.id)
+        // Also send a snapshot so peers converge even if delete delta is delayed.
+        SyncService.shared.sendSnapshot(entries)
     }
 
     func mergeRemote(_ entry: IntakeEntry) {
@@ -44,6 +51,18 @@ final class IntakeStore: ObservableObject {
         let before = entries.count
         entries.removeAll { $0.id == id }
         if entries.count != before { save() }
+    }
+
+    func updateEntry(_ updated: IntakeEntry, broadcast: Bool = true) {
+        guard let index = entries.firstIndex(where: { $0.id == updated.id }) else { return }
+        entries[index] = updated
+        entries.sort { $0.timestamp > $1.timestamp }
+        save()
+        if broadcast {
+            // We don't have a delta "update" message type yet. Send a snapshot so
+            // watch + phone converge immediately on corrected logs.
+            SyncService.shared.sendSnapshot(entries)
+        }
     }
 
     func replaceAll(_ newEntries: [IntakeEntry]) {
@@ -100,13 +119,39 @@ final class IntakeStore: ObservableObject {
     func writeComplicationData() {
         guard let group = UserDefaults(suiteName: "group.com.intaketracker.shared") else { return }
         let today = Date()
+        let dayStart = Calendar.current.startOfDay(for: today).timeIntervalSince1970
         group.set(total(of: .water, on: today), forKey: "complication.waterTotal")
         group.set(total(of: .caffeine, on: today), forKey: "complication.caffeineTotal")
+        let halfLife = CaffeineKinetics.halfLifeHours(defaults: defaults)
+        let bodyLoad = CaffeineKinetics.currentBodyLoad(entries: entries, now: today, halfLifeHours: halfLife)
+        group.set(bodyLoad, forKey: "complication.caffeineBodyLoad")
+        group.set(today.timeIntervalSince1970, forKey: "complication.caffeineBodyLoadAt")
+        group.set(halfLife, forKey: "complication.caffeineHalfLifeHours")
+        // Widget providers use this to detect day rollover and avoid showing stale totals.
+        group.set(dayStart, forKey: "complication.dayStart")
         // Mirror the current targets so the widget can show the correct goal line
         let waterTarget = defaults.double(forKey: "target.waterGlasses")
         group.set(waterTarget > 0 ? waterTarget : 8, forKey: "target.waterGlasses")
         let caffeineTarget = defaults.double(forKey: "target.caffeineMg")
         group.set(caffeineTarget > 0 ? caffeineTarget : 400, forKey: "target.caffeineMg")
+
+        // Latest log timestamps for Smart Stack relevance
+        let lastWater = entries.first(where: { $0.type == .water })?.timestamp
+        let lastCaffeine = entries.first(where: { $0.type == .caffeine })?.timestamp
+        group.set(lastWater?.timeIntervalSince1970 ?? 0, forKey: "complication.lastWaterLogged")
+        group.set(lastCaffeine?.timeIntervalSince1970 ?? 0, forKey: "complication.lastCaffeineLogged")
+
+        // Fullness count + latest weight for new circular widgets
+        let mealsLogged = MealType.allCases.reduce(0) { count, meal in
+            count + (mealFullness(for: meal, on: today) == nil ? 0 : 1)
+        }
+        group.set(mealsLogged, forKey: "complication.fullnessCount")
+        let latestWeight = latestEntry(type: .weight)?.amount ?? 0
+        group.set(latestWeight, forKey: "complication.weightLatest")
+
+        // Mirror weight target
+        let weightTarget = defaults.double(forKey: "target.weightKg")
+        group.set(weightTarget > 0 ? weightTarget : 70, forKey: "target.weightKg")
 
         // Prompt WidgetKit to re-read from the App Group. Without this, the
         // progress ring can appear stale until the system decides to reload.

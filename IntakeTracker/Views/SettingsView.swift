@@ -3,6 +3,7 @@ import SwiftUI
 struct SettingsView: View {
     @AppStorage("target.waterGlasses") private var waterTarget: Double = 8
     @AppStorage("target.caffeineMg") private var caffeineTarget: Double = 400
+    @AppStorage(CaffeineKinetics.halfLifeKey) private var caffeineHalfLifeHours: Double = CaffeineKinetics.defaultHalfLifeHours
     @AppStorage("target.weightKg") private var weightTargetKg: Double = 70
     @AppStorage("target.waistCm") private var waistTargetCm: Double = 85
     @AppStorage(MealWindowKeys.breakfastStartMinutes) private var breakfastStartMinutes: Int = MealWindowDefaults.breakfastStart
@@ -65,10 +66,24 @@ struct SettingsView: View {
                             }
                         }
                     }
+                    Stepper(value: $caffeineHalfLifeHours, in: 3...8, step: 0.5) {
+                        HStack {
+                            Image(systemName: "clock.badge.questionmark")
+                                .foregroundStyle(.brown)
+                                .frame(width: 24)
+                            VStack(alignment: .leading) {
+                                Text("Caffeine half-life")
+                                    .font(.subheadline)
+                                Text(String(format: "%.1f h", caffeineHalfLifeHours))
+                                    .font(.title3.bold())
+                                    .monospacedDigit()
+                            }
+                        }
+                    }
                 } header: {
                     Text("Daily Targets")
                 } footer: {
-                    Text("The FDA considers up to 400 mg of caffeine per day safe for most adults.")
+                    Text("The FDA considers up to 400 mg of caffeine per day safe for most adults. Half-life is an estimate used for body-load calculations.")
                 }
 
                 Section {
@@ -134,6 +149,7 @@ struct SettingsView: View {
             }
             .onChange(of: waterTarget) { syncTargets() }
             .onChange(of: caffeineTarget) { syncTargets() }
+            .onChange(of: caffeineHalfLifeHours) { syncTargets() }
             .onChange(of: weightTargetKg) { syncTargets() }
             .onChange(of: waistTargetCm) { syncTargets() }
             .onChange(of: breakfastStartMinutes) { syncTargets() }
@@ -156,6 +172,7 @@ struct SettingsView: View {
             caffeine: caffeineTarget,
             weightKg: weightTargetKg,
             waistCm: waistTargetCm,
+            caffeineHalfLifeHours: caffeineHalfLifeHours,
             breakfastStartMinutes: breakfastStartMinutes,
             lunchStartMinutes: lunchStartMinutes,
             snackStartMinutes: snackStartMinutes,
